@@ -1,0 +1,298 @@
+{
+  "version": "44.0.0",
+  "artifacts": {
+    "PupperStack.assets": {
+      "type": "cdk:asset-manifest",
+      "properties": {
+        "file": "PupperStack.assets.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+      }
+    },
+    "PupperStack": {
+      "type": "aws:cloudformation:stack",
+      "environment": "aws://212684282361/us-east-2",
+      "properties": {
+        "templateFile": "PupperStack.template.json",
+        "terminationProtection": false,
+        "validateOnSynth": false,
+        "assumeRoleArn": "arn:${AWS::Partition}:iam::212684282361:role/cdk-hnb659fds-deploy-role-212684282361-us-east-2",
+        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::212684282361:role/cdk-hnb659fds-cfn-exec-role-212684282361-us-east-2",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-212684282361-us-east-2/853712e51fd60800cb5587e125e8a50a1085b1da3f3bc56d62824d538708d405.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
+        "additionalDependencies": [
+          "PupperStack.assets"
+        ],
+        "lookupRole": {
+          "arn": "arn:${AWS::Partition}:iam::212684282361:role/cdk-hnb659fds-lookup-role-212684282361-us-east-2",
+          "requiresBootstrapStackVersion": 8,
+          "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+        }
+      },
+      "dependencies": [
+        "PupperStack.assets"
+      ],
+      "metadata": {
+        "/PupperStack/DogsTable": [
+          {
+            "type": "aws:cdk:hasPhysicalName",
+            "data": {
+              "Ref": "DogsTable78D17CEF"
+            }
+          }
+        ],
+        "/PupperStack/DogsTable/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "DogsTable78D17CEF"
+          }
+        ],
+        "/PupperStack/VotesTable": [
+          {
+            "type": "aws:cdk:hasPhysicalName",
+            "data": {
+              "Ref": "VotesTable39A917AC"
+            }
+          }
+        ],
+        "/PupperStack/VotesTable/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VotesTable39A917AC"
+          }
+        ],
+        "/PupperStack/PupperImagesBucket/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PupperImagesBucketD100108D"
+          }
+        ],
+        "/PupperStack/CreateDogFunction/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CreateDogFunctionServiceRole1C129A3D"
+          }
+        ],
+        "/PupperStack/CreateDogFunction/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CreateDogFunctionServiceRoleDefaultPolicyBB1CC401"
+          }
+        ],
+        "/PupperStack/CreateDogFunction/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CreateDogFunctionFED218F0"
+          }
+        ],
+        "/PupperStack/GetDogsFunction/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "GetDogsFunctionServiceRole34EC9EA5"
+          }
+        ],
+        "/PupperStack/GetDogsFunction/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "GetDogsFunctionServiceRoleDefaultPolicyAC8EDEC3"
+          }
+        ],
+        "/PupperStack/GetDogsFunction/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "GetDogsFunction8926D00C"
+          }
+        ],
+        "/PupperStack/VoteDogFunction/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VoteDogFunctionServiceRoleA5A3AC58"
+          }
+        ],
+        "/PupperStack/VoteDogFunction/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VoteDogFunctionServiceRoleDefaultPolicy3C55D1EB"
+          }
+        ],
+        "/PupperStack/VoteDogFunction/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VoteDogFunctionCA39C728"
+          }
+        ],
+        "/PupperStack/PupperApi/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PupperApiCF69E181"
+          }
+        ],
+        "/PupperStack/PupperApi/Deployment/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PupperApiDeployment714C7E7C50e5c2b8791ae1a46dd9758988702947"
+          }
+        ],
+        "/PupperStack/PupperApi/DeploymentStage.prod/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PupperApiDeploymentStageprod6CE535E3"
+          }
+        ],
+        "/PupperStack/PupperApi/Endpoint": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PupperApiEndpoint7D73B7FB"
+          }
+        ],
+        "/PupperStack/PupperApi/Default/OPTIONS/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PupperApiOPTIONS1AE22176"
+          }
+        ],
+        "/PupperStack/PupperApi/Default/dogs/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PupperApidogs5C027535"
+          }
+        ],
+        "/PupperStack/PupperApi/Default/dogs/OPTIONS/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PupperApidogsOPTIONS8C0BA6CE"
+          }
+        ],
+        "/PupperStack/PupperApi/Default/dogs/POST/ApiPermission.PupperStackPupperApiC85903B8.POST..dogs": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PupperApidogsPOSTApiPermissionPupperStackPupperApiC85903B8POSTdogs15F58BDB"
+          }
+        ],
+        "/PupperStack/PupperApi/Default/dogs/POST/ApiPermission.Test.PupperStackPupperApiC85903B8.POST..dogs": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PupperApidogsPOSTApiPermissionTestPupperStackPupperApiC85903B8POSTdogs1B7A8378"
+          }
+        ],
+        "/PupperStack/PupperApi/Default/dogs/POST/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PupperApidogsPOSTD2B177F5"
+          }
+        ],
+        "/PupperStack/PupperApi/Default/dogs/GET/ApiPermission.PupperStackPupperApiC85903B8.GET..dogs": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PupperApidogsGETApiPermissionPupperStackPupperApiC85903B8GETdogs500FF7F7"
+          }
+        ],
+        "/PupperStack/PupperApi/Default/dogs/GET/ApiPermission.Test.PupperStackPupperApiC85903B8.GET..dogs": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PupperApidogsGETApiPermissionTestPupperStackPupperApiC85903B8GETdogs3DA36ECD"
+          }
+        ],
+        "/PupperStack/PupperApi/Default/dogs/GET/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PupperApidogsGET8CF63279"
+          }
+        ],
+        "/PupperStack/PupperApi/Default/dogs/{dogId}/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PupperApidogsdogIdE4411718"
+          }
+        ],
+        "/PupperStack/PupperApi/Default/dogs/{dogId}/OPTIONS/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PupperApidogsdogIdOPTIONSA3CD31DC"
+          }
+        ],
+        "/PupperStack/PupperApi/Default/dogs/{dogId}/vote/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PupperApidogsdogIdvoteDD08CACD"
+          }
+        ],
+        "/PupperStack/PupperApi/Default/dogs/{dogId}/vote/OPTIONS/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PupperApidogsdogIdvoteOPTIONSB722BDAB"
+          }
+        ],
+        "/PupperStack/PupperApi/Default/dogs/{dogId}/vote/POST/ApiPermission.PupperStackPupperApiC85903B8.POST..dogs.{dogId}.vote": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PupperApidogsdogIdvotePOSTApiPermissionPupperStackPupperApiC85903B8POSTdogsdogIdvoteD5496833"
+          }
+        ],
+        "/PupperStack/PupperApi/Default/dogs/{dogId}/vote/POST/ApiPermission.Test.PupperStackPupperApiC85903B8.POST..dogs.{dogId}.vote": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PupperApidogsdogIdvotePOSTApiPermissionTestPupperStackPupperApiC85903B8POSTdogsdogIdvoteCCCC2111"
+          }
+        ],
+        "/PupperStack/PupperApi/Default/dogs/{dogId}/vote/POST/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PupperApidogsdogIdvotePOSTF85B8192"
+          }
+        ],
+        "/PupperStack/DogsTableName": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "DogsTableName"
+          }
+        ],
+        "/PupperStack/VotesTableName": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VotesTableName"
+          }
+        ],
+        "/PupperStack/ImagesBucketName": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ImagesBucketName"
+          }
+        ],
+        "/PupperStack/ApiUrl": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ApiUrl"
+          }
+        ],
+        "/PupperStack/CDKMetadata/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadata"
+          }
+        ],
+        "/PupperStack/BootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BootstrapVersion"
+          }
+        ],
+        "/PupperStack/CheckBootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CheckBootstrapVersion"
+          }
+        ]
+      },
+      "displayName": "PupperStack"
+    },
+    "Tree": {
+      "type": "cdk:tree",
+      "properties": {
+        "file": "tree.json"
+      }
+    }
+  },
+  "minimumCliVersion": "2.1019.2"
+}
