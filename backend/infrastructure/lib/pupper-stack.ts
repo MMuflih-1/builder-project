@@ -1,6 +1,7 @@
 import * as cdk from 'aws-cdk-lib';
 import * as dynamodb from 'aws-cdk-lib/aws-dynamodb';
 import * as s3 from 'aws-cdk-lib/aws-s3';
+import * as s3n from 'aws-cdk-lib/aws-s3-notifications';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import * as apigateway from 'aws-cdk-lib/aws-apigateway';
 import * as cognito from 'aws-cdk-lib/aws-cognito';
@@ -123,11 +124,51 @@ export class PupperStack extends cdk.Stack {
       },
     });
 
+    const uploadImageFunction = new lambda.Function(this, 'UploadImageFunction', {
+      runtime: lambda.Runtime.NODEJS_18_X,
+      handler: 'upload-image.handler',
+      code: lambda.Code.fromAsset('../lambda/dist'),
+      environment: {
+        IMAGES_BUCKET_NAME: imagesBucket.bucketName,
+      },
+    });
+
+    const processImageFunction = new lambda.Function(this, 'ProcessImageFunction', {
+      runtime: lambda.Runtime.NODEJS_18_X,
+      handler: 'process-image.handler',
+      code: lambda.Code.fromAsset('../lambda/dist'),
+      environment: {
+        DOGS_TABLE_NAME: dogsTable.tableName,
+      },
+      timeout: cdk.Duration.minutes(5), // Image processing can take time
+      memorySize: 1024, // More memory for image processing
+    });
+
     // Grant permissions to Lambda functions
     dogsTable.grantReadWriteData(createDogFunction);
     dogsTable.grantReadData(getDogsFunction);
     votesTable.grantReadWriteData(voteDogFunction);
     imagesBucket.grantReadWrite(createDogFunction);
+    imagesBucket.grantReadWrite(uploadImageFunction);
+    imagesBucket.grantReadWrite(processImageFunction);
+    dogsTable.grantReadWriteData(processImageFunction);
+
+    // S3 trigger for image processing
+    imagesBucket.addEventNotification(
+      s3.EventType.OBJECT_CREATED,
+      new s3n.LambdaDestination(processImageFunction),
+      { suffix: '.jpg' }
+    );
+    imagesBucket.addEventNotification(
+      s3.EventType.OBJECT_CREATED,
+      new s3n.LambdaDestination(processImageFunction),
+      { suffix: '.jpeg' }
+    );
+    imagesBucket.addEventNotification(
+      s3.EventType.OBJECT_CREATED,
+      new s3n.LambdaDestination(processImageFunction),
+      { suffix: '.png' }
+    );
 
     // API Gateway
     const api = new apigateway.RestApi(this, 'PupperApi', {
@@ -140,7 +181,7 @@ export class PupperStack extends cdk.Stack {
       },
     });
 
-    // API Routes
+    // API Routes (Public for testing)
     const dogs = api.root.addResource('dogs');
     dogs.addMethod('POST', new apigateway.LambdaIntegration(createDogFunction));
     dogs.addMethod('GET', new apigateway.LambdaIntegration(getDogsFunction));
@@ -148,6 +189,10 @@ export class PupperStack extends cdk.Stack {
     const dogById = dogs.addResource('{dogId}');
     const vote = dogById.addResource('vote');
     vote.addMethod('POST', new apigateway.LambdaIntegration(voteDogFunction));
+
+    // Image upload endpoint
+    const upload = api.root.addResource('upload');
+    upload.addMethod('POST', new apigateway.LambdaIntegration(uploadImageFunction));
 
     // Output the table names and bucket name for use in Lambda functions
     new cdk.CfnOutput(this, 'DogsTableName', {
