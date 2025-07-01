@@ -18,7 +18,7 @@
         "validateOnSynth": false,
         "assumeRoleArn": "arn:${AWS::Partition}:iam::212684282361:role/cdk-hnb659fds-deploy-role-212684282361-us-east-2",
         "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::212684282361:role/cdk-hnb659fds-cfn-exec-role-212684282361-us-east-2",
-        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-212684282361-us-east-2/f1ff7e8d23e1a750c7e199a7d8c2f722e9a7cc432dfe011def19eb5c82268695.json",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-212684282361-us-east-2/797e6910dc86df645b1aa5676e1831e06f943620cb124325b933d4a0b541e97e.json",
         "requiresBootstrapStackVersion": 6,
         "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
         "additionalDependencies": [
@@ -66,6 +66,12 @@
           {
             "type": "aws:cdk:logicalId",
             "data": "PupperImagesBucketD100108D"
+          }
+        ],
+        "/PupperStack/PupperImagesBucket/Policy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PupperImagesBucketPolicy2F8AE4CC"
           }
         ],
         "/PupperStack/PupperImagesBucket/Notifications/Resource": [
@@ -197,7 +203,7 @@
         "/PupperStack/PupperApi/Deployment/Resource": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "PupperApiDeployment714C7E7C2674d859b37e883cc7f9ba1f973262e1"
+            "data": "PupperApiDeployment714C7E7C38a9aa88d1c64b326db22e9fbbb11d2b"
           }
         ],
         "/PupperStack/PupperApi/DeploymentStage.prod/Resource": [

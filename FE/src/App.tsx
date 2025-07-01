@@ -4,6 +4,7 @@ import './App.css'
 import { Authenticator } from '@aws-amplify/ui-react';
 import '@aws-amplify/ui-react/styles.css';
 import { Amplify } from 'aws-amplify';
+import DogList from './components/DogList';
 
 function App() {
   const user_pool_id = import.meta.env.VITE_USER_POOL_ID;
@@ -40,7 +41,7 @@ function App() {
     }
   });
 
-  const Home = () => <div>Welcome to Pupper!</div>;
+  const Home = () => <DogList />;
   const DogDetail = () => <div>Dog Details</div>;
 
   return (

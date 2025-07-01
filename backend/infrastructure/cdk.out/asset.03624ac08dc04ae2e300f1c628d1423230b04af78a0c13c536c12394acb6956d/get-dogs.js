@@ -70,12 +70,7 @@ const handler = async (event) => {
         });
         return {
             statusCode: 200,
-            headers: {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*',
-                'Access-Control-Allow-Headers': 'Content-Type',
-                'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS'
-            },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 dogs: sanitizedDogs,
                 count: sanitizedDogs.length
@@ -86,12 +81,7 @@ const handler = async (event) => {
         console.error('Error fetching dogs:', error);
         return {
             statusCode: 500,
-            headers: {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*',
-                'Access-Control-Allow-Headers': 'Content-Type',
-                'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS'
-            },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ error: 'Internal server error' }),
         };
     }

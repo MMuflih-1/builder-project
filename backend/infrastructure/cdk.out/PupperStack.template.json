@@ -161,10 +161,10 @@
      ]
     },
     "PublicAccessBlockConfiguration": {
-     "BlockPublicAcls": true,
-     "BlockPublicPolicy": true,
-     "IgnorePublicAcls": true,
-     "RestrictPublicBuckets": true
+     "BlockPublicAcls": false,
+     "BlockPublicPolicy": false,
+     "IgnorePublicAcls": false,
+     "RestrictPublicBuckets": false
     },
     "VersioningConfiguration": {
      "Status": "Enabled"
@@ -174,6 +174,43 @@
    "DeletionPolicy": "Delete",
    "Metadata": {
     "aws:cdk:path": "PupperStack/PupperImagesBucket/Resource"
+   }
+  },
+  "PupperImagesBucketPolicy2F8AE4CC": {
+   "Type": "AWS::S3::BucketPolicy",
+   "Properties": {
+    "Bucket": {
+     "Ref": "PupperImagesBucketD100108D"
+    },
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": "s3:GetObject",
+       "Effect": "Allow",
+       "Principal": {
+        "AWS": "*"
+       },
+       "Resource": {
+        "Fn::Join": [
+         "",
+         [
+          {
+           "Fn::GetAtt": [
+            "PupperImagesBucketD100108D",
+            "Arn"
+           ]
+          },
+          "/*"
+         ]
+        ]
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "PupperStack/PupperImagesBucket/Policy/Resource"
    }
   },
   "PupperImagesBucketNotifications13CFE64D": {
@@ -259,7 +296,8 @@
     "SkipDestinationValidation": false
    },
    "DependsOn": [
-    "PupperImagesBucketAllowBucketNotificationsToPupperStackProcessImageFunctionFDB0A25C574896E4"
+    "PupperImagesBucketAllowBucketNotificationsToPupperStackProcessImageFunctionFDB0A25C574896E4",
+    "PupperImagesBucketPolicy2F8AE4CC"
    ],
    "Metadata": {
     "aws:cdk:path": "PupperStack/PupperImagesBucket/Notifications/Resource"
@@ -422,7 +460,7 @@
    "Properties": {
     "Code": {
      "S3Bucket": "cdk-hnb659fds-assets-212684282361-us-east-2",
-     "S3Key": "6d98ab34f9cb9c794664ddbe00090851dbcfd11e9c9d4a26598faf8d103faf8a.zip"
+     "S3Key": "69a8e04a4af2cb8583d8241c7f553b4ef67fafb6cffcc2cc6258a42af94db89d.zip"
     },
     "Environment": {
      "Variables": {
@@ -447,7 +485,7 @@
    ],
    "Metadata": {
     "aws:cdk:path": "PupperStack/CreateDogFunction/Resource",
-    "aws:asset:path": "asset.6d98ab34f9cb9c794664ddbe00090851dbcfd11e9c9d4a26598faf8d103faf8a",
+    "aws:asset:path": "asset.69a8e04a4af2cb8583d8241c7f553b4ef67fafb6cffcc2cc6258a42af94db89d",
     "aws:asset:is-bundled": false,
     "aws:asset:property": "Code"
    }
@@ -545,7 +583,7 @@
    "Properties": {
     "Code": {
      "S3Bucket": "cdk-hnb659fds-assets-212684282361-us-east-2",
-     "S3Key": "6d98ab34f9cb9c794664ddbe00090851dbcfd11e9c9d4a26598faf8d103faf8a.zip"
+     "S3Key": "69a8e04a4af2cb8583d8241c7f553b4ef67fafb6cffcc2cc6258a42af94db89d.zip"
     },
     "Environment": {
      "Variables": {
@@ -569,7 +607,7 @@
    ],
    "Metadata": {
     "aws:cdk:path": "PupperStack/GetDogsFunction/Resource",
-    "aws:asset:path": "asset.6d98ab34f9cb9c794664ddbe00090851dbcfd11e9c9d4a26598faf8d103faf8a",
+    "aws:asset:path": "asset.69a8e04a4af2cb8583d8241c7f553b4ef67fafb6cffcc2cc6258a42af94db89d",
     "aws:asset:is-bundled": false,
     "aws:asset:property": "Code"
    }
@@ -671,7 +709,7 @@
    "Properties": {
     "Code": {
      "S3Bucket": "cdk-hnb659fds-assets-212684282361-us-east-2",
-     "S3Key": "6d98ab34f9cb9c794664ddbe00090851dbcfd11e9c9d4a26598faf8d103faf8a.zip"
+     "S3Key": "69a8e04a4af2cb8583d8241c7f553b4ef67fafb6cffcc2cc6258a42af94db89d.zip"
     },
     "Environment": {
      "Variables": {
@@ -695,7 +733,7 @@
    ],
    "Metadata": {
     "aws:cdk:path": "PupperStack/VoteDogFunction/Resource",
-    "aws:asset:path": "asset.6d98ab34f9cb9c794664ddbe00090851dbcfd11e9c9d4a26598faf8d103faf8a",
+    "aws:asset:path": "asset.69a8e04a4af2cb8583d8241c7f553b4ef67fafb6cffcc2cc6258a42af94db89d",
     "aws:asset:is-bundled": false,
     "aws:asset:property": "Code"
    }
@@ -795,7 +833,7 @@
    "Properties": {
     "Code": {
      "S3Bucket": "cdk-hnb659fds-assets-212684282361-us-east-2",
-     "S3Key": "6d98ab34f9cb9c794664ddbe00090851dbcfd11e9c9d4a26598faf8d103faf8a.zip"
+     "S3Key": "69a8e04a4af2cb8583d8241c7f553b4ef67fafb6cffcc2cc6258a42af94db89d.zip"
     },
     "Environment": {
      "Variables": {
@@ -819,7 +857,7 @@
    ],
    "Metadata": {
     "aws:cdk:path": "PupperStack/UploadImageFunction/Resource",
-    "aws:asset:path": "asset.6d98ab34f9cb9c794664ddbe00090851dbcfd11e9c9d4a26598faf8d103faf8a",
+    "aws:asset:path": "asset.69a8e04a4af2cb8583d8241c7f553b4ef67fafb6cffcc2cc6258a42af94db89d",
     "aws:asset:is-bundled": false,
     "aws:asset:property": "Code"
    }
@@ -958,7 +996,7 @@
    "Properties": {
     "Code": {
      "S3Bucket": "cdk-hnb659fds-assets-212684282361-us-east-2",
-     "S3Key": "6d98ab34f9cb9c794664ddbe00090851dbcfd11e9c9d4a26598faf8d103faf8a.zip"
+     "S3Key": "69a8e04a4af2cb8583d8241c7f553b4ef67fafb6cffcc2cc6258a42af94db89d.zip"
     },
     "Environment": {
      "Variables": {
@@ -967,8 +1005,8 @@
       }
      }
     },
-    "Handler": "process-image.handler",
-    "MemorySize": 1024,
+    "Handler": "process-image-simple.handler",
+    "MemorySize": 512,
     "Role": {
      "Fn::GetAtt": [
       "ProcessImageFunctionServiceRole72C7EC03",
@@ -976,7 +1014,7 @@
      ]
     },
     "Runtime": "nodejs18.x",
-    "Timeout": 300
+    "Timeout": 120
    },
    "DependsOn": [
     "ProcessImageFunctionServiceRoleDefaultPolicyB15F8842",
@@ -984,7 +1022,7 @@
    ],
    "Metadata": {
     "aws:cdk:path": "PupperStack/ProcessImageFunction/Resource",
-    "aws:asset:path": "asset.6d98ab34f9cb9c794664ddbe00090851dbcfd11e9c9d4a26598faf8d103faf8a",
+    "aws:asset:path": "asset.69a8e04a4af2cb8583d8241c7f553b4ef67fafb6cffcc2cc6258a42af94db89d",
     "aws:asset:is-bundled": false,
     "aws:asset:property": "Code"
    }
@@ -1082,7 +1120,7 @@
     "aws:cdk:path": "PupperStack/PupperApi/Resource"
    }
   },
-  "PupperApiDeployment714C7E7C2674d859b37e883cc7f9ba1f973262e1": {
+  "PupperApiDeployment714C7E7C38a9aa88d1c64b326db22e9fbbb11d2b": {
    "Type": "AWS::ApiGateway::Deployment",
    "Properties": {
     "Description": "API for Pupper dog adoption app",
@@ -1114,7 +1152,7 @@
    "Type": "AWS::ApiGateway::Stage",
    "Properties": {
     "DeploymentId": {
-     "Ref": "PupperApiDeployment714C7E7C2674d859b37e883cc7f9ba1f973262e1"
+     "Ref": "PupperApiDeployment714C7E7C38a9aa88d1c64b326db22e9fbbb11d2b"
     },
     "RestApiId": {
      "Ref": "PupperApiCF69E181"
@@ -1135,9 +1173,13 @@
      "IntegrationResponses": [
       {
        "ResponseParameters": {
-        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,Authorization'",
-        "method.response.header.Access-Control-Allow-Origin": "'*'",
-        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,PUT,POST,DELETE,PATCH,HEAD'"
+        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,Authorization,X-Requested-With'",
+        "method.response.header.Access-Control-Allow-Origin": "'http://localhost:5173'",
+        "method.response.header.Vary": "'Origin'",
+        "method.response.header.Access-Control-Allow-Methods": "'GET,POST,PUT,DELETE,OPTIONS'"
+       },
+       "ResponseTemplates": {
+        "application/json": "#set($origin = $input.params().header.get(\"Origin\"))\n#if($origin == \"\")\n  #set($origin = $input.params().header.get(\"origin\"))\n#end\n#if($origin == \"http://localhost:3000\")\n  #set($context.responseOverride.header.Access-Control-Allow-Origin = $origin)\n#end"
        },
        "StatusCode": "204"
       }
@@ -1152,6 +1194,7 @@
       "ResponseParameters": {
        "method.response.header.Access-Control-Allow-Headers": true,
        "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Vary": true,
        "method.response.header.Access-Control-Allow-Methods": true
       },
       "StatusCode": "204"
@@ -1199,9 +1242,13 @@
      "IntegrationResponses": [
       {
        "ResponseParameters": {
-        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,Authorization'",
-        "method.response.header.Access-Control-Allow-Origin": "'*'",
-        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,PUT,POST,DELETE,PATCH,HEAD'"
+        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,Authorization,X-Requested-With'",
+        "method.response.header.Access-Control-Allow-Origin": "'http://localhost:5173'",
+        "method.response.header.Vary": "'Origin'",
+        "method.response.header.Access-Control-Allow-Methods": "'GET,POST,PUT,DELETE,OPTIONS'"
+       },
+       "ResponseTemplates": {
+        "application/json": "#set($origin = $input.params().header.get(\"Origin\"))\n#if($origin == \"\")\n  #set($origin = $input.params().header.get(\"origin\"))\n#end\n#if($origin == \"http://localhost:3000\")\n  #set($context.responseOverride.header.Access-Control-Allow-Origin = $origin)\n#end"
        },
        "StatusCode": "204"
       }
@@ -1216,6 +1263,7 @@
       "ResponseParameters": {
        "method.response.header.Access-Control-Allow-Headers": true,
        "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Vary": true,
        "method.response.header.Access-Control-Allow-Methods": true
       },
       "StatusCode": "204"
@@ -1447,9 +1495,13 @@
      "IntegrationResponses": [
       {
        "ResponseParameters": {
-        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,Authorization'",
-        "method.response.header.Access-Control-Allow-Origin": "'*'",
-        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,PUT,POST,DELETE,PATCH,HEAD'"
+        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,Authorization,X-Requested-With'",
+        "method.response.header.Access-Control-Allow-Origin": "'http://localhost:5173'",
+        "method.response.header.Vary": "'Origin'",
+        "method.response.header.Access-Control-Allow-Methods": "'GET,POST,PUT,DELETE,OPTIONS'"
+       },
+       "ResponseTemplates": {
+        "application/json": "#set($origin = $input.params().header.get(\"Origin\"))\n#if($origin == \"\")\n  #set($origin = $input.params().header.get(\"origin\"))\n#end\n#if($origin == \"http://localhost:3000\")\n  #set($context.responseOverride.header.Access-Control-Allow-Origin = $origin)\n#end"
        },
        "StatusCode": "204"
       }
@@ -1464,6 +1516,7 @@
       "ResponseParameters": {
        "method.response.header.Access-Control-Allow-Headers": true,
        "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Vary": true,
        "method.response.header.Access-Control-Allow-Methods": true
       },
       "StatusCode": "204"
@@ -1505,9 +1558,13 @@
      "IntegrationResponses": [
       {
        "ResponseParameters": {
-        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,Authorization'",
-        "method.response.header.Access-Control-Allow-Origin": "'*'",
-        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,PUT,POST,DELETE,PATCH,HEAD'"
+        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,Authorization,X-Requested-With'",
+        "method.response.header.Access-Control-Allow-Origin": "'http://localhost:5173'",
+        "method.response.header.Vary": "'Origin'",
+        "method.response.header.Access-Control-Allow-Methods": "'GET,POST,PUT,DELETE,OPTIONS'"
+       },
+       "ResponseTemplates": {
+        "application/json": "#set($origin = $input.params().header.get(\"Origin\"))\n#if($origin == \"\")\n  #set($origin = $input.params().header.get(\"origin\"))\n#end\n#if($origin == \"http://localhost:3000\")\n  #set($context.responseOverride.header.Access-Control-Allow-Origin = $origin)\n#end"
        },
        "StatusCode": "204"
       }
@@ -1522,6 +1579,7 @@
       "ResponseParameters": {
        "method.response.header.Access-Control-Allow-Headers": true,
        "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Vary": true,
        "method.response.header.Access-Control-Allow-Methods": true
       },
       "StatusCode": "204"
@@ -1661,9 +1719,13 @@
      "IntegrationResponses": [
       {
        "ResponseParameters": {
-        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,Authorization'",
-        "method.response.header.Access-Control-Allow-Origin": "'*'",
-        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,PUT,POST,DELETE,PATCH,HEAD'"
+        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,Authorization,X-Requested-With'",
+        "method.response.header.Access-Control-Allow-Origin": "'http://localhost:5173'",
+        "method.response.header.Vary": "'Origin'",
+        "method.response.header.Access-Control-Allow-Methods": "'GET,POST,PUT,DELETE,OPTIONS'"
+       },
+       "ResponseTemplates": {
+        "application/json": "#set($origin = $input.params().header.get(\"Origin\"))\n#if($origin == \"\")\n  #set($origin = $input.params().header.get(\"origin\"))\n#end\n#if($origin == \"http://localhost:3000\")\n  #set($context.responseOverride.header.Access-Control-Allow-Origin = $origin)\n#end"
        },
        "StatusCode": "204"
       }
@@ -1678,6 +1740,7 @@
       "ResponseParameters": {
        "method.response.header.Access-Control-Allow-Headers": true,
        "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Vary": true,
        "method.response.header.Access-Control-Allow-Methods": true
       },
       "StatusCode": "204"
@@ -1792,7 +1855,7 @@
   "CDKMetadata": {
    "Type": "AWS::CDK::Metadata",
    "Properties": {
-    "Analytics": "v2:deflate64:H4sIAAAAAAAA/22OQW+DMAyFf0vvwUNM2r1l2m1qRXevTOKyFJIgHIZQlP8+JVBph53eZz/Z71VQlRWUB1y4kKovBt1CuHqUvcCFb0GtFo1TLYQvbAcS9d1miIJfIZxm2ZNPy502OSFTFAOaViGE+m4vNBnNrJ0VH7OVPkF9t0+OQqOB0LgtIOvFDVquadwoBd6QmTzDMYnAUXfoacEVQkPsj6PO1zu+0zi41ZDN/f5MV49dztmgIXbzJCmVFp/kv51K5k5Pd/+cOcZ/1yLXSk+17ZJxnv04+yisUwQPfvmpKniD8vBgrYtptl4bgmbTX6cRhg2IAQAA"
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/22OQW+DMAyFf0vvwUNM2r1l2m1qRXevDDEshSQIJ0Mo4r9PCVTdYaf3PVv2ewUUeQH5AWfOGtlng6ohXB02vcCZb0EuBrWVNYQvrAcSZWsSrIJfIZx805OLw502udhBNctzvPvNnJBpFQPqWiKEsjUXmrRiVtaID28aF6FszYNXoVBDqOyWnvQZsFFsc0NmcgzHKAJH1aGjGRcIFbE7jipd7/hO42AXTSaV/+OuDruUs0FFbP3UUCwtPsl9WxmXOz22++fE6/rvWKRa8akyXVycvRu9W4WxkuDOLz9FAW+QH+6sVDZ545QmqDb9BRgL6EWlAQAA"
    },
    "Metadata": {
     "aws:cdk:path": "PupperStack/CDKMetadata/Default"

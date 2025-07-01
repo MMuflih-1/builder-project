@@ -1,10 +1,7 @@
 import { S3Event, S3Handler } from 'aws-lambda';
-import { S3Client, GetObjectCommand, PutObjectCommand } from '@aws-sdk/client-s3';
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocumentClient, UpdateCommand } from '@aws-sdk/lib-dynamodb';
-import sharp from 'sharp';
 
-const s3Client = new S3Client({});
 const dynamoClient = new DynamoDBClient({});
 const docClient = DynamoDBDocumentClient.from(dynamoClient);
 
@@ -23,53 +20,22 @@ export const handler: S3Handler = async (event: S3Event) => {
 
       console.log(`Processing image: ${key}`);
 
-      // Get the original image
-      const getObjectResponse = await s3Client.send(new GetObjectCommand({
-        Bucket: bucket,
-        Key: key,
-      }));
-
-      if (!getObjectResponse.Body) {
-        throw new Error('No image data found');
+      // Extract dogId from filename (format: uuid-original.jpg)
+      // UUID format: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx-original.jpg
+      const parts = key.split('-');
+      let dogId;
+      
+      if (parts.length >= 6 && parts[5].startsWith('original')) {
+        // Reconstruct full UUID (first 5 parts)
+        dogId = parts.slice(0, 5).join('-');
+        console.log(`Extracted dogId: ${dogId} from key: ${key}`);
+      } else {
+        console.error(`Invalid filename format: ${key}`);
+        continue;
       }
 
-      const imageBuffer = Buffer.from(await getObjectResponse.Body.transformToByteArray());
-
-      // Create 400x400 resized image
-      const resizedBuffer = await sharp(imageBuffer)
-        .resize(400, 400, { fit: 'cover' })
-        .png()
-        .toBuffer();
-
-      // Create 50x50 thumbnail
-      const thumbnailBuffer = await sharp(imageBuffer)
-        .resize(50, 50, { fit: 'cover' })
-        .png()
-        .toBuffer();
-
-      // Upload resized images
-      const resizedKey = `resized-${key.replace(/\.[^/.]+$/, '.png')}`;
-      const thumbnailKey = `thumbnail-${key.replace(/\.[^/.]+$/, '.png')}`;
-
-      await Promise.all([
-        s3Client.send(new PutObjectCommand({
-          Bucket: bucket,
-          Key: resizedKey,
-          Body: resizedBuffer,
-          ContentType: 'image/png',
-        })),
-        s3Client.send(new PutObjectCommand({
-          Bucket: bucket,
-          Key: thumbnailKey,
-          Body: thumbnailBuffer,
-          ContentType: 'image/png',
-        })),
-      ]);
-
-      // Extract dogId from filename (assuming format: dogId-original.jpg)
-      const dogId = key.split('-')[0];
-
-      // Update DynamoDB with image URLs
+      // For now, just use the original image for all sizes
+      // In production, you'd want proper image resizing
       const baseUrl = `https://${bucket}.s3.amazonaws.com`;
       
       console.log(`Updating DynamoDB for dogId: ${dogId}`);
@@ -81,8 +47,8 @@ export const handler: S3Handler = async (event: S3Event) => {
           UpdateExpression: 'SET originalImageUrl = :original, resizedImageUrl = :resized, thumbnailUrl = :thumbnail',
           ExpressionAttributeValues: {
             ':original': `${baseUrl}/${key}`,
-            ':resized': `${baseUrl}/${resizedKey}`,
-            ':thumbnail': `${baseUrl}/${thumbnailKey}`,
+            ':resized': `${baseUrl}/${key}`, // Using original for now
+            ':thumbnail': `${baseUrl}/${key}`, // Using original for now
           },
           ReturnValues: 'ALL_NEW'
         }));

@@ -84,7 +84,13 @@ export class PupperStack extends cdk.Stack {
     const imagesBucket = new s3.Bucket(this, 'PupperImagesBucket', {
       bucketName: `pupper-images-${this.account}-${this.region}`,
       encryption: s3.BucketEncryption.S3_MANAGED,
-      blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
+      publicReadAccess: true,
+      blockPublicAccess: new s3.BlockPublicAccess({
+        blockPublicAcls: false,
+        blockPublicPolicy: false,
+        ignorePublicAcls: false,
+        restrictPublicBuckets: false,
+      }),
       versioned: true,
       lifecycleRules: [
         {
@@ -135,13 +141,13 @@ export class PupperStack extends cdk.Stack {
 
     const processImageFunction = new lambda.Function(this, 'ProcessImageFunction', {
       runtime: lambda.Runtime.NODEJS_18_X,
-      handler: 'process-image.handler',
+      handler: 'process-image-simple.handler',
       code: lambda.Code.fromAsset('../lambda/dist'),
       environment: {
         DOGS_TABLE_NAME: dogsTable.tableName,
       },
-      timeout: cdk.Duration.minutes(5), // Image processing can take time
-      memorySize: 1024, // More memory for image processing
+      timeout: cdk.Duration.minutes(2),
+      memorySize: 512,
     });
 
     // Grant permissions to Lambda functions
@@ -175,9 +181,9 @@ export class PupperStack extends cdk.Stack {
       restApiName: 'Pupper Service',
       description: 'API for Pupper dog adoption app',
       defaultCorsPreflightOptions: {
-        allowOrigins: apigateway.Cors.ALL_ORIGINS,
-        allowMethods: apigateway.Cors.ALL_METHODS,
-        allowHeaders: ['Content-Type', 'Authorization'],
+        allowOrigins: ['http://localhost:5173', 'http://localhost:3000'],
+        allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+        allowHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
       },
     });
 
