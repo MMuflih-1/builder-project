@@ -1,0 +1,378 @@
+import { useState } from 'react';
+
+const API_URL = 'https://iw7dv4kkca.execute-api.us-east-2.amazonaws.com/prod';
+
+interface DogFormData {
+  shelter: string;
+  city: string;
+  state: string;
+  name: string;
+  species: string;
+  description: string;
+  birthday: string;
+  weight: string;
+  color: string;
+}
+
+export default function AddDog() {
+  const [formData, setFormData] = useState<DogFormData>({
+    shelter: '',
+    city: '',
+    state: '',
+    name: '',
+    species: 'Labrador Retriever',
+    description: '',
+    birthday: '',
+    weight: '',
+    color: ''
+  });
+
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState('');
+  const [dragOver, setDragOver] = useState(false);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleFileSelect = (file: File) => {
+    if (file && (file.type === 'image/jpeg' || file.type === 'image/jpg' || file.type === 'image/png')) {
+      setSelectedFile(file);
+      setMessage('');
+    } else {
+      setMessage('Please select a valid image file (JPEG or PNG)');
+    }
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      handleFileSelect(file);
+    }
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    setDragOver(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent) => {
+    e.preventDefault();
+    setDragOver(false);
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    setDragOver(false);
+    const file = e.dataTransfer.files[0];
+    if (file) {
+      handleFileSelect(file);
+    }
+  };
+
+  const uploadImage = async (dogId: string) => {
+    if (!selectedFile) return;
+
+    try {
+      // Get upload URL
+      const uploadResponse = await fetch(`${API_URL}/upload`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          dogId: dogId,
+          fileName: selectedFile.name,
+          fileType: selectedFile.type,
+        }),
+      });
+
+      if (!uploadResponse.ok) {
+        throw new Error('Failed to get upload URL');
+      }
+
+      const { uploadUrl } = await uploadResponse.json();
+
+      // Upload file to S3
+      const fileUploadResponse = await fetch(uploadUrl, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': selectedFile.type,
+        },
+        body: selectedFile,
+      });
+
+      if (!fileUploadResponse.ok) {
+        throw new Error('Failed to upload image');
+      }
+
+      return true;
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      throw error;
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setMessage('');
+
+    try {
+      // Validate required fields
+      const requiredFields = ['shelter', 'city', 'state', 'name', 'description', 'birthday', 'weight', 'color'];
+      for (const field of requiredFields) {
+        if (!formData[field as keyof DogFormData]) {
+          setMessage(`Please fill in the ${field} field`);
+          setLoading(false);
+          return;
+        }
+      }
+
+      // Create dog
+      const dogResponse = await fetch(`${API_URL}/dogs`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (!dogResponse.ok) {
+        const errorData = await dogResponse.json();
+        throw new Error(errorData.error || 'Failed to create dog');
+      }
+
+      const { dogId } = await dogResponse.json();
+
+      // Upload image if selected
+      if (selectedFile) {
+        await uploadImage(dogId);
+        setMessage('Dog and image uploaded successfully! The image will be processed shortly.');
+      } else {
+        setMessage('Dog uploaded successfully!');
+      }
+
+      // Reset form
+      setFormData({
+        shelter: '',
+        city: '',
+        state: '',
+        name: '',
+        species: 'Labrador Retriever',
+        description: '',
+        birthday: '',
+        weight: '',
+        color: ''
+      });
+      setSelectedFile(null);
+
+    } catch (error: any) {
+      setMessage(`Error: ${error.message}`);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div style={{ padding: '20px', maxWidth: '600px', margin: '0 auto' }}>
+      <h2>Add New Dog for Adoption</h2>
+      
+      <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+        
+        {/* Shelter Information */}
+        <div>
+          <label>Shelter Name *</label>
+          <input
+            type="text"
+            name="shelter"
+            value={formData.shelter}
+            onChange={handleInputChange}
+            placeholder="e.g., Happy Paws Rescue"
+            style={{ width: '100%', padding: '8px', marginTop: '5px' }}
+            required
+          />
+        </div>
+
+        <div style={{ display: 'flex', gap: '10px' }}>
+          <div style={{ flex: 1 }}>
+            <label>City *</label>
+            <input
+              type="text"
+              name="city"
+              value={formData.city}
+              onChange={handleInputChange}
+              placeholder="e.g., Charlotte"
+              style={{ width: '100%', padding: '8px', marginTop: '5px' }}
+              required
+            />
+          </div>
+          <div style={{ flex: 1 }}>
+            <label>State *</label>
+            <input
+              type="text"
+              name="state"
+              value={formData.state}
+              onChange={handleInputChange}
+              placeholder="e.g., NC"
+              style={{ width: '100%', padding: '8px', marginTop: '5px' }}
+              required
+            />
+          </div>
+        </div>
+
+        {/* Dog Information */}
+        <div>
+          <label>Dog Name *</label>
+          <input
+            type="text"
+            name="name"
+            value={formData.name}
+            onChange={handleInputChange}
+            placeholder="e.g., Buddy"
+            style={{ width: '100%', padding: '8px', marginTop: '5px' }}
+            required
+          />
+        </div>
+
+        <div>
+          <label>Species *</label>
+          <select
+            name="species"
+            value={formData.species}
+            onChange={handleInputChange}
+            style={{ width: '100%', padding: '8px', marginTop: '5px' }}
+            required
+          >
+            <option value="Labrador Retriever">Labrador Retriever</option>
+          </select>
+          <small style={{ color: '#666' }}>Only Labrador Retrievers are accepted</small>
+        </div>
+
+        <div>
+          <label>Description *</label>
+          <textarea
+            name="description"
+            value={formData.description}
+            onChange={handleInputChange}
+            placeholder="e.g., Friendly dog, great with kids, loves to play fetch"
+            style={{ width: '100%', padding: '8px', marginTop: '5px', minHeight: '80px' }}
+            required
+          />
+        </div>
+
+        <div style={{ display: 'flex', gap: '10px' }}>
+          <div style={{ flex: 1 }}>
+            <label>Birthday *</label>
+            <input
+              type="date"
+              name="birthday"
+              value={formData.birthday}
+              onChange={handleInputChange}
+              style={{ width: '100%', padding: '8px', marginTop: '5px' }}
+              required
+            />
+          </div>
+          <div style={{ flex: 1 }}>
+            <label>Weight (lbs) *</label>
+            <input
+              type="number"
+              name="weight"
+              value={formData.weight}
+              onChange={handleInputChange}
+              placeholder="e.g., 32"
+              style={{ width: '100%', padding: '8px', marginTop: '5px' }}
+              required
+            />
+          </div>
+        </div>
+
+        <div>
+          <label>Color *</label>
+          <input
+            type="text"
+            name="color"
+            value={formData.color}
+            onChange={handleInputChange}
+            placeholder="e.g., Brown, Yellow, Black"
+            style={{ width: '100%', padding: '8px', marginTop: '5px' }}
+            required
+          />
+        </div>
+
+        {/* Image Upload */}
+        <div>
+          <label>Dog Photo</label>
+          <div
+            onDragOver={handleDragOver}
+            onDragLeave={handleDragLeave}
+            onDrop={handleDrop}
+            style={{
+              border: `2px dashed ${dragOver ? '#007bff' : '#ddd'}`,
+              borderRadius: '8px',
+              padding: '20px',
+              textAlign: 'center',
+              marginTop: '5px',
+              backgroundColor: dragOver ? '#f8f9fa' : 'white',
+              cursor: 'pointer'
+            }}
+          >
+            {selectedFile ? (
+              <div>
+                <p>Selected: {selectedFile.name}</p>
+                <img 
+                  src={URL.createObjectURL(selectedFile)} 
+                  alt="Preview" 
+                  style={{ maxWidth: '200px', maxHeight: '200px', objectFit: 'cover' }}
+                />
+              </div>
+            ) : (
+              <div>
+                <p>Drag & drop an image here, or click to select</p>
+                <input
+                  type="file"
+                  accept="image/jpeg,image/jpg,image/png"
+                  onChange={handleFileChange}
+                  style={{ marginTop: '10px' }}
+                />
+              </div>
+            )}
+          </div>
+        </div>
+
+        {message && (
+          <div style={{ 
+            padding: '10px', 
+            borderRadius: '4px', 
+            backgroundColor: message.includes('Error') ? '#f8d7da' : '#d4edda',
+            color: message.includes('Error') ? '#721c24' : '#155724',
+            border: `1px solid ${message.includes('Error') ? '#f5c6cb' : '#c3e6cb'}`
+          }}>
+            {message}
+          </div>
+        )}
+
+        <button
+          type="submit"
+          disabled={loading}
+          style={{
+            backgroundColor: loading ? '#6c757d' : '#007bff',
+            color: 'white',
+            border: 'none',
+            padding: '12px 24px',
+            borderRadius: '4px',
+            cursor: loading ? 'not-allowed' : 'pointer',
+            fontSize: '16px'
+          }}
+        >
+          {loading ? 'Uploading...' : 'Add Dog'}
+        </button>
+      </form>
+    </div>
+  );
+}

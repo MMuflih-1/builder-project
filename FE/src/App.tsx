@@ -5,6 +5,7 @@ import { Authenticator } from '@aws-amplify/ui-react';
 import '@aws-amplify/ui-react/styles.css';
 import { Amplify } from 'aws-amplify';
 import DogList from './components/DogList';
+import AddDog from './components/AddDog';
 
 function App() {
   const user_pool_id = import.meta.env.VITE_USER_POOL_ID;
@@ -49,12 +50,14 @@ function App() {
       {({ signOut, user }) => (
         <>
           <Router>
-            <nav>
-              <Link to="/">Home</Link>
-              <button onClick={signOut}>Logout</button>
+            <nav style={{ padding: '10px', borderBottom: '1px solid #ddd', marginBottom: '20px' }}>
+              <Link to="/" style={{ marginRight: '20px', textDecoration: 'none', color: '#007bff' }}>Home</Link>
+              <Link to="/add-dog" style={{ marginRight: '20px', textDecoration: 'none', color: '#007bff' }}>Add Dog</Link>
+              <button onClick={signOut} style={{ float: 'right', backgroundColor: '#dc3545', color: 'white', border: 'none', padding: '5px 10px', borderRadius: '4px' }}>Logout</button>
             </nav>
             <Routes>
               <Route path="/" element={<Home />} />
+              <Route path="/add-dog" element={<AddDog />} />
               <Route path="/dogs/:id" element={<DogDetail />} />
             </Routes>
           </Router>

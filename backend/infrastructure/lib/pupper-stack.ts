@@ -91,6 +91,14 @@ export class PupperStack extends cdk.Stack {
         ignorePublicAcls: false,
         restrictPublicBuckets: false,
       }),
+      cors: [
+        {
+          allowedMethods: [s3.HttpMethods.GET, s3.HttpMethods.PUT, s3.HttpMethods.POST],
+          allowedOrigins: ['http://localhost:5173', 'http://localhost:3000'],
+          allowedHeaders: ['*'],
+          maxAge: 3000,
+        },
+      ],
       versioned: true,
       lifecycleRules: [
         {
