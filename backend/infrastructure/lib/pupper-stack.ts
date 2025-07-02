@@ -167,6 +167,18 @@ export class PupperStack extends cdk.Stack {
       },
     });
 
+    const postConfirmationFunction = new lambda.Function(this, 'PostConfirmationFunction', {
+      runtime: lambda.Runtime.NODEJS_18_X,
+      handler: 'post-confirmation.handler',
+      code: lambda.Code.fromAsset('../lambda/dist'),
+    });
+
+    const preSignupFunction = new lambda.Function(this, 'PreSignupFunction', {
+      runtime: lambda.Runtime.NODEJS_18_X,
+      handler: 'pre-signup.handler',
+      code: lambda.Code.fromAsset('../lambda/dist'),
+    });
+
     // Grant permissions to Lambda functions
     dogsTable.grantReadWriteData(createDogFunction);
     dogsTable.grantReadData(getDogsFunction);
@@ -243,6 +255,74 @@ export class PupperStack extends cdk.Stack {
     new cdk.CfnOutput(this, 'ApiUrl', {
       value: api.url,
       exportName: 'PupperApiUrl',
+    });
+
+    // Cognito User Pool (simplified to avoid circular dependency)
+    const userPool = new cognito.UserPool(this, 'PupperUserPool', {
+      userPoolName: 'pupper-users',
+      selfSignUpEnabled: true,
+      signInAliases: {
+        email: true,
+        username: true,
+      },
+      autoVerify: {
+        email: true,
+      },
+      standardAttributes: {
+        email: {
+          required: true,
+          mutable: true,
+        },
+        fullname: {
+          required: true,
+          mutable: true,
+        },
+      },
+      customAttributes: {
+        user_role: new cognito.StringAttribute({
+          minLen: 1,
+          maxLen: 20,
+          mutable: false,
+        }),
+      },
+      passwordPolicy: {
+        minLength: 8,
+        requireLowercase: true,
+        requireUppercase: true,
+        requireDigits: true,
+        requireSymbols: false,
+      },
+      accountRecovery: cognito.AccountRecovery.EMAIL_ONLY,
+      removalPolicy: cdk.RemovalPolicy.DESTROY,
+    });
+
+    // User Pool Client
+    const userPoolClient = new cognito.UserPoolClient(this, 'PupperUserPoolClient', {
+      userPool,
+      userPoolClientName: 'pupper-web-client',
+      generateSecret: false,
+      authFlows: {
+        userSrp: true,
+        userPassword: true,
+      },
+    });
+
+    // Grant permissions for PostConfirmation function to add users to groups
+    postConfirmationFunction.addToRolePolicy(new cdk.aws_iam.PolicyStatement({
+      effect: cdk.aws_iam.Effect.ALLOW,
+      actions: ['cognito-idp:AdminAddUserToGroup'],
+      resources: [userPool.userPoolArn],
+    }));
+
+    // Output Cognito details
+    new cdk.CfnOutput(this, 'UserPoolId', {
+      value: userPool.userPoolId,
+      exportName: 'PupperUserPoolId',
+    });
+
+    new cdk.CfnOutput(this, 'UserPoolClientId', {
+      value: userPoolClient.userPoolClientId,
+      exportName: 'PupperUserPoolClientId',
     });
   }
 }

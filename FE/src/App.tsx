@@ -1,13 +1,34 @@
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import './App.css'
 import { Authenticator } from '@aws-amplify/ui-react';
 import '@aws-amplify/ui-react/styles.css';
 import { Amplify } from 'aws-amplify';
+import { fetchAuthSession } from 'aws-amplify/auth';
 import DogList from './components/DogList';
 import AddDog from './components/AddDog';
 import Favorites from './components/Favorites';
 
 function App() {
+  const [userGroups, setUserGroups] = useState<string[]>([]);
+  const [currentUser, setCurrentUser] = useState<any>(null);
+  
+  const getUserGroups = async () => {
+    try {
+      const session = await fetchAuthSession();
+      const groups = session.tokens?.idToken?.payload?.['cognito:groups'] as string[] || [];
+      setUserGroups(groups);
+    } catch (error) {
+      console.log('Error fetching groups:', error);
+      setUserGroups([]);
+    }
+  };
+  
+  useEffect(() => {
+    if (currentUser) {
+      getUserGroups();
+    }
+  }, [currentUser]);
   const user_pool_id = import.meta.env.VITE_USER_POOL_ID;
   const client_id = import.meta.env.VITE_CLIENT_ID;
 
@@ -19,6 +40,12 @@ function App() {
       name: {
         order: 2,
         label: 'Full Name',
+      },
+      'custom:user_role': {
+        order: 3,
+        label: 'I am a (type "adopter" or "shelter"):',
+        placeholder: 'adopter or shelter',
+        required: true
       },
       password: {
         order: 4
@@ -53,18 +80,38 @@ function App() {
           localStorage.setItem('currentUserEmail', user.signInDetails.loginId);
         }
         
+        // Update current user state
+        if (user !== currentUser) {
+          setCurrentUser(user);
+        }
+        
         return (
         <>
           <Router>
             <nav style={{ padding: '10px', borderBottom: '1px solid #ddd', marginBottom: '20px' }}>
               <Link to="/" style={{ marginRight: '20px', textDecoration: 'none', color: '#007bff' }}>Home</Link>
-              <Link to="/add-dog" style={{ marginRight: '20px', textDecoration: 'none', color: '#007bff' }}>Add Dog</Link>
+              {userGroups.includes('shelter') && (
+                <Link to="/add-dog" style={{ marginRight: '20px', textDecoration: 'none', color: '#007bff' }}>Add Dog</Link>
+              )}
               <Link to="/favorites" style={{ marginRight: '20px', textDecoration: 'none', color: '#28a745' }}>💖 My Favorites</Link>
-              <button onClick={signOut} style={{ float: 'right', backgroundColor: '#dc3545', color: 'white', border: 'none', padding: '5px 10px', borderRadius: '4px' }}>Logout</button>
+              <div style={{ float: 'right', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <span style={{ fontSize: '12px', color: '#666' }}>
+                  {userGroups.includes('shelter') ? '🏠 Shelter' : '🐕 Adopter'}
+                </span>
+                <button onClick={signOut} style={{ backgroundColor: '#dc3545', color: 'white', border: 'none', padding: '5px 10px', borderRadius: '4px' }}>Logout</button>
+              </div>
             </nav>
             <Routes>
               <Route path="/" element={<Home user={user} />} />
-              <Route path="/add-dog" element={<AddDog />} />
+              <Route path="/add-dog" element={
+                userGroups.includes('shelter') ? 
+                <AddDog /> : 
+                <div style={{ padding: '20px', textAlign: 'center' }}>
+                  <h2>Access Denied</h2>
+                  <p>Only registered shelters can add dogs for adoption.</p>
+                  <p>Please contact an administrator to be added to the shelter group.</p>
+                </div>
+              } />
               <Route path="/favorites" element={<Favorites user={user} />} />
               <Route path="/dogs/:id" element={<DogDetail />} />
             </Routes>

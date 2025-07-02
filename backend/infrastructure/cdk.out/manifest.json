@@ -18,7 +18,7 @@
         "validateOnSynth": false,
         "assumeRoleArn": "arn:${AWS::Partition}:iam::212684282361:role/cdk-hnb659fds-deploy-role-212684282361-us-east-2",
         "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::212684282361:role/cdk-hnb659fds-cfn-exec-role-212684282361-us-east-2",
-        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-212684282361-us-east-2/156522415f36accc5a7ca4e5f0bdf10e92b48e2e0577021b5e586dc129d0bba1.json",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-212684282361-us-east-2/20b73df3258444fae880a1c586bc2b71d2f6c19a56764ed015f31d9669b5f427.json",
         "requiresBootstrapStackVersion": 6,
         "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
         "additionalDependencies": [
@@ -192,6 +192,36 @@
           {
             "type": "aws:cdk:logicalId",
             "data": "GetUserVotesFunction6B6B7600"
+          }
+        ],
+        "/PupperStack/PostConfirmationFunction/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PostConfirmationFunctionServiceRoleE856FC83"
+          }
+        ],
+        "/PupperStack/PostConfirmationFunction/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PostConfirmationFunctionServiceRoleDefaultPolicy49917DA4"
+          }
+        ],
+        "/PupperStack/PostConfirmationFunction/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PostConfirmationFunction3DFFAE63"
+          }
+        ],
+        "/PupperStack/PreSignupFunction/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PreSignupFunctionServiceRole5334302F"
+          }
+        ],
+        "/PupperStack/PreSignupFunction/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PreSignupFunction4F2ED1FA"
           }
         ],
         "/PupperStack/BucketNotificationsHandler050a0587b7544547bf325f094a3db834/Role/Resource": [
@@ -438,6 +468,30 @@
           {
             "type": "aws:cdk:logicalId",
             "data": "ApiUrl"
+          }
+        ],
+        "/PupperStack/PupperUserPool/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PupperUserPoolC5BC1883"
+          }
+        ],
+        "/PupperStack/PupperUserPoolClient/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PupperUserPoolClient3368A196"
+          }
+        ],
+        "/PupperStack/UserPoolId": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "UserPoolId"
+          }
+        ],
+        "/PupperStack/UserPoolClientId": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "UserPoolClientId"
           }
         ],
         "/PupperStack/CDKMetadata/Default": [
