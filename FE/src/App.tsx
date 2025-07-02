@@ -8,6 +8,7 @@ import { fetchAuthSession } from 'aws-amplify/auth';
 import DogList from './components/DogList';
 import AddDog from './components/AddDog';
 import Favorites from './components/Favorites';
+import MyDogs from './components/MyDogs';
 
 function App() {
   const [userGroups, setUserGroups] = useState<string[]>([]);
@@ -93,6 +94,9 @@ function App() {
               {userGroups.includes('shelter') && (
                 <Link to="/add-dog" style={{ marginRight: '20px', textDecoration: 'none', color: '#007bff' }}>Add Dog</Link>
               )}
+              {userGroups.includes('shelter') && (
+                <Link to="/my-dogs" style={{ marginRight: '20px', textDecoration: 'none', color: '#007bff' }}>🏠 My Dogs</Link>
+              )}
               <Link to="/favorites" style={{ marginRight: '20px', textDecoration: 'none', color: '#28a745' }}>💖 My Favorites</Link>
               <div style={{ float: 'right', display: 'flex', alignItems: 'center', gap: '10px' }}>
                 <span style={{ fontSize: '12px', color: '#666' }}>
@@ -113,6 +117,14 @@ function App() {
                 </div>
               } />
               <Route path="/favorites" element={<Favorites user={user} />} />
+              <Route path="/my-dogs" element={
+                userGroups.includes('shelter') ? 
+                <MyDogs user={user} /> : 
+                <div style={{ padding: '20px', textAlign: 'center' }}>
+                  <h2>Access Denied</h2>
+                  <p>Only registered shelters can view this page.</p>
+                </div>
+              } />
               <Route path="/dogs/:id" element={<DogDetail />} />
             </Routes>
           </Router>
