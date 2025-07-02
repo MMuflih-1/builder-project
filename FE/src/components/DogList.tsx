@@ -28,11 +28,16 @@ export default function DogList({ user }: DogListProps) {
   const [votingDogId, setVotingDogId] = useState<string | null>(null);
   const [userVotes, setUserVotes] = useState<Record<string, 'wag' | 'growl'>>({});
   const [voteMessage, setVoteMessage] = useState<{dogId: string, message: string, type: 'success' | 'error'} | null>(null);
+  const [selectedState, setSelectedState] = useState<string>('');
+  const [selectedColor, setSelectedColor] = useState<string>('');
+  const [minAge, setMinAge] = useState<string>('');
+  const [maxAge, setMaxAge] = useState<string>('');
+  const [searchTerm, setSearchTerm] = useState<string>('');
 
   useEffect(() => {
     fetchDogs();
     fetchUserVotes();
-  }, []);
+  }, [selectedState, selectedColor, minAge, maxAge, searchTerm]); // Re-fetch when filters change
 
   const fetchUserVotes = async () => {
     try {
@@ -56,9 +61,34 @@ export default function DogList({ user }: DogListProps) {
 
   const fetchDogs = async () => {
     try {
-      const response = await fetch(`${API_URL}/dogs`);
+      let url = `${API_URL}/dogs`;
+      const params = new URLSearchParams();
+      
+      if (selectedState) params.append('state', selectedState);
+      if (selectedColor) params.append('color', selectedColor);
+      if (minAge) params.append('minAge', minAge);
+      if (maxAge) params.append('maxAge', maxAge);
+      
+      if (params.toString()) {
+        url += `?${params.toString()}`;
+      }
+      
+      const response = await fetch(url);
       const data = await response.json();
-      setDogs(data.dogs || []);
+      let filteredDogs = data.dogs || [];
+      
+      // Client-side search filtering
+      if (searchTerm) {
+        const searchLower = searchTerm.toLowerCase();
+        filteredDogs = filteredDogs.filter((dog: Dog) => 
+          dog.description.toLowerCase().includes(searchLower) ||
+          dog.shelter.toLowerCase().includes(searchLower) ||
+          dog.city.toLowerCase().includes(searchLower) ||
+          dog.color.toLowerCase().includes(searchLower)
+        );
+      }
+      
+      setDogs(filteredDogs);
     } catch (error) {
       console.error('Error fetching dogs:', error);
     } finally {
@@ -145,10 +175,191 @@ export default function DogList({ user }: DogListProps) {
     <div style={{ padding: '20px' }}>
       <h1>Available Dogs for Adoption</h1>
       
+      {/* Filter Controls */}
+      <div style={{ 
+        marginBottom: '20px', 
+        padding: '15px', 
+        backgroundColor: '#f8f9fa', 
+        borderRadius: '8px',
+        border: '1px solid #dee2e6'
+      }}>
+        <h3 style={{ margin: '0 0 10px 0', fontSize: '16px' }}>Search & Filter Dogs</h3>
+        
+        {/* Search Box */}
+        <div style={{ marginBottom: '15px' }}>
+          <input
+            type="text"
+            placeholder="Search by description, shelter, city, or color..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            style={{
+              width: '100%',
+              padding: '10px',
+              borderRadius: '4px',
+              border: '1px solid #ccc',
+              fontSize: '14px'
+            }}
+          />
+        </div>
+        
+        <div style={{ display: 'flex', gap: '15px', alignItems: 'center', flexWrap: 'wrap' }}>
+          <div>
+            <label style={{ marginRight: '8px', fontWeight: 'bold' }}>State:</label>
+            <select 
+              value={selectedState} 
+              onChange={(e) => setSelectedState(e.target.value)}
+              style={{ 
+                padding: '5px 10px', 
+                borderRadius: '4px', 
+                border: '1px solid #ccc',
+                backgroundColor: 'white'
+              }}
+            >
+              <option value="">All States</option>
+              <option value="AL">Alabama</option>
+              <option value="AK">Alaska</option>
+              <option value="AZ">Arizona</option>
+              <option value="AR">Arkansas</option>
+              <option value="CA">California</option>
+              <option value="CO">Colorado</option>
+              <option value="CT">Connecticut</option>
+              <option value="DE">Delaware</option>
+              <option value="FL">Florida</option>
+              <option value="GA">Georgia</option>
+              <option value="HI">Hawaii</option>
+              <option value="ID">Idaho</option>
+              <option value="IL">Illinois</option>
+              <option value="IN">Indiana</option>
+              <option value="IA">Iowa</option>
+              <option value="KS">Kansas</option>
+              <option value="KY">Kentucky</option>
+              <option value="LA">Louisiana</option>
+              <option value="ME">Maine</option>
+              <option value="MD">Maryland</option>
+              <option value="MA">Massachusetts</option>
+              <option value="MI">Michigan</option>
+              <option value="MN">Minnesota</option>
+              <option value="MS">Mississippi</option>
+              <option value="MO">Missouri</option>
+              <option value="MT">Montana</option>
+              <option value="NE">Nebraska</option>
+              <option value="NV">Nevada</option>
+              <option value="NH">New Hampshire</option>
+              <option value="NJ">New Jersey</option>
+              <option value="NM">New Mexico</option>
+              <option value="NY">New York</option>
+              <option value="NC">North Carolina</option>
+              <option value="ND">North Dakota</option>
+              <option value="OH">Ohio</option>
+              <option value="OK">Oklahoma</option>
+              <option value="OR">Oregon</option>
+              <option value="PA">Pennsylvania</option>
+              <option value="RI">Rhode Island</option>
+              <option value="SC">South Carolina</option>
+              <option value="SD">South Dakota</option>
+              <option value="TN">Tennessee</option>
+              <option value="TX">Texas</option>
+              <option value="UT">Utah</option>
+              <option value="VT">Vermont</option>
+              <option value="VA">Virginia</option>
+              <option value="WA">Washington</option>
+              <option value="WV">West Virginia</option>
+              <option value="WI">Wisconsin</option>
+              <option value="WY">Wyoming</option>
+            </select>
+          </div>
+          
+          <div>
+            <label style={{ marginRight: '8px', fontWeight: 'bold' }}>Color:</label>
+            <select 
+              value={selectedColor} 
+              onChange={(e) => setSelectedColor(e.target.value)}
+              style={{ 
+                padding: '5px 10px', 
+                borderRadius: '4px', 
+                border: '1px solid #ccc',
+                backgroundColor: 'white'
+              }}
+            >
+              <option value="">All Colors</option>
+              <option value="Black">Black</option>
+              <option value="Brown">Brown</option>
+              <option value="Yellow">Yellow</option>
+              <option value="Blonde">Blonde</option>
+              <option value="Golden">Golden</option>
+              <option value="Chocolate">Chocolate</option>
+              <option value="Silver">Silver</option>
+              <option value="White">White</option>
+            </select>
+          </div>
+          
+          <div style={{ display: 'flex', gap: '5px', alignItems: 'center' }}>
+            <label style={{ fontWeight: 'bold' }}>Age:</label>
+            <input
+              type="number"
+              placeholder="Min"
+              value={minAge}
+              onChange={(e) => setMinAge(e.target.value)}
+              style={{ 
+                width: '60px', 
+                padding: '5px', 
+                borderRadius: '4px', 
+                border: '1px solid #ccc'
+              }}
+            />
+            <span>to</span>
+            <input
+              type="number"
+              placeholder="Max"
+              value={maxAge}
+              onChange={(e) => setMaxAge(e.target.value)}
+              style={{ 
+                width: '60px', 
+                padding: '5px', 
+                borderRadius: '4px', 
+                border: '1px solid #ccc'
+              }}
+            />
+            <span style={{ fontSize: '12px', color: '#666' }}>years</span>
+          </div>
+          
+          {(selectedState || selectedColor || minAge || maxAge || searchTerm) && (
+            <button 
+              onClick={() => {
+                setSelectedState('');
+                setSelectedColor('');
+                setMinAge('');
+                setMaxAge('');
+                setSearchTerm('');
+              }}
+              style={{
+                padding: '5px 10px',
+                backgroundColor: '#6c757d',
+                color: 'white',
+                border: 'none',
+                borderRadius: '4px',
+                cursor: 'pointer',
+                fontSize: '12px'
+              }}
+            >
+              Clear All Filters
+            </button>
+          )}
+        </div>
+      </div>
+      
       {dogs.length === 0 ? (
-        <p>No dogs available for adoption at the moment.</p>
+        <p>No dogs match your current filters.</p>
       ) : (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '20px' }}>
+        <>
+          <p style={{ marginBottom: '15px', color: '#666' }}>
+            Showing {dogs.length} dogs
+            {searchTerm && ` matching "${searchTerm}"`}
+            {selectedState && ` • in ${selectedState}`}
+            {selectedColor && ` • ${selectedColor} color`}
+            {(minAge || maxAge) && ` • Age: ${minAge || '0'}-${maxAge || '∞'} years`}
+          </p>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '20px' }}>
           {dogs.map((dog) => (
             <div key={dog.dogId} style={{ 
               border: '1px solid #ddd', 
@@ -247,7 +458,8 @@ export default function DogList({ user }: DogListProps) {
               </div>
             </div>
           ))}
-        </div>
+          </div>
+        </>
       )}
 
       {/* Modal for full image */}
