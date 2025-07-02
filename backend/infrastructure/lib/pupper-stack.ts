@@ -158,10 +158,20 @@ export class PupperStack extends cdk.Stack {
       memorySize: 512,
     });
 
+    const getUserVotesFunction = new lambda.Function(this, 'GetUserVotesFunction', {
+      runtime: lambda.Runtime.NODEJS_18_X,
+      handler: 'get-user-votes.handler',
+      code: lambda.Code.fromAsset('../lambda/dist'),
+      environment: {
+        VOTES_TABLE_NAME: votesTable.tableName,
+      },
+    });
+
     // Grant permissions to Lambda functions
     dogsTable.grantReadWriteData(createDogFunction);
     dogsTable.grantReadData(getDogsFunction);
     votesTable.grantReadWriteData(voteDogFunction);
+    votesTable.grantReadData(getUserVotesFunction);
     imagesBucket.grantReadWrite(createDogFunction);
     imagesBucket.grantReadWrite(uploadImageFunction);
     imagesBucket.grantReadWrite(processImageFunction);
@@ -207,6 +217,12 @@ export class PupperStack extends cdk.Stack {
     // Image upload endpoint
     const upload = api.root.addResource('upload');
     upload.addMethod('POST', new apigateway.LambdaIntegration(uploadImageFunction));
+
+    // User votes endpoint
+    const users = api.root.addResource('users');
+    const userById = users.addResource('{userId}');
+    const userVotes = userById.addResource('votes');
+    userVotes.addMethod('GET', new apigateway.LambdaIntegration(getUserVotesFunction));
 
     // Output the table names and bucket name for use in Lambda functions
     new cdk.CfnOutput(this, 'DogsTableName', {

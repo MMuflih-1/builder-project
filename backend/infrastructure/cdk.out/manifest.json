@@ -18,7 +18,7 @@
         "validateOnSynth": false,
         "assumeRoleArn": "arn:${AWS::Partition}:iam::212684282361:role/cdk-hnb659fds-deploy-role-212684282361-us-east-2",
         "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::212684282361:role/cdk-hnb659fds-cfn-exec-role-212684282361-us-east-2",
-        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-212684282361-us-east-2/acabc82064068a27211b09523c45e6e292962e29437e2858934cc2d2d4532009.json",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-212684282361-us-east-2/156522415f36accc5a7ca4e5f0bdf10e92b48e2e0577021b5e586dc129d0bba1.json",
         "requiresBootstrapStackVersion": 6,
         "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
         "additionalDependencies": [
@@ -176,6 +176,24 @@
             "data": "ProcessImageFunction340ACD7C"
           }
         ],
+        "/PupperStack/GetUserVotesFunction/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "GetUserVotesFunctionServiceRole5F555563"
+          }
+        ],
+        "/PupperStack/GetUserVotesFunction/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "GetUserVotesFunctionServiceRoleDefaultPolicy6D3A1DA0"
+          }
+        ],
+        "/PupperStack/GetUserVotesFunction/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "GetUserVotesFunction6B6B7600"
+          }
+        ],
         "/PupperStack/BucketNotificationsHandler050a0587b7544547bf325f094a3db834/Role/Resource": [
           {
             "type": "aws:cdk:logicalId",
@@ -203,7 +221,7 @@
         "/PupperStack/PupperApi/Deployment/Resource": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "PupperApiDeployment714C7E7C38a9aa88d1c64b326db22e9fbbb11d2b"
+            "data": "PupperApiDeployment714C7E7Cb88d70cb317231c01679f003cbc17e71"
           }
         ],
         "/PupperStack/PupperApi/DeploymentStage.prod/Resource": [
@@ -342,6 +360,60 @@
           {
             "type": "aws:cdk:logicalId",
             "data": "PupperApiuploadPOSTCA7712A1"
+          }
+        ],
+        "/PupperStack/PupperApi/Default/users/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PupperApiusers1B967DF9"
+          }
+        ],
+        "/PupperStack/PupperApi/Default/users/OPTIONS/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PupperApiusersOPTIONS03930153"
+          }
+        ],
+        "/PupperStack/PupperApi/Default/users/{userId}/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PupperApiusersuserIdE8BCA39D"
+          }
+        ],
+        "/PupperStack/PupperApi/Default/users/{userId}/OPTIONS/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PupperApiusersuserIdOPTIONSDFEAC8B7"
+          }
+        ],
+        "/PupperStack/PupperApi/Default/users/{userId}/votes/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PupperApiusersuserIdvotes6FF32DEB"
+          }
+        ],
+        "/PupperStack/PupperApi/Default/users/{userId}/votes/OPTIONS/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PupperApiusersuserIdvotesOPTIONS6D9AD9D9"
+          }
+        ],
+        "/PupperStack/PupperApi/Default/users/{userId}/votes/GET/ApiPermission.PupperStackPupperApiC85903B8.GET..users.{userId}.votes": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PupperApiusersuserIdvotesGETApiPermissionPupperStackPupperApiC85903B8GETusersuserIdvotesC893DBB3"
+          }
+        ],
+        "/PupperStack/PupperApi/Default/users/{userId}/votes/GET/ApiPermission.Test.PupperStackPupperApiC85903B8.GET..users.{userId}.votes": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PupperApiusersuserIdvotesGETApiPermissionTestPupperStackPupperApiC85903B8GETusersuserIdvotesC3E9D2A9"
+          }
+        ],
+        "/PupperStack/PupperApi/Default/users/{userId}/votes/GET/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PupperApiusersuserIdvotesGETD1839797"
           }
         ],
         "/PupperStack/DogsTableName": [

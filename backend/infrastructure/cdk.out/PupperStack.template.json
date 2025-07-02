@@ -479,7 +479,7 @@
    "Properties": {
     "Code": {
      "S3Bucket": "cdk-hnb659fds-assets-212684282361-us-east-2",
-     "S3Key": "fbc2dd4ddb335ca84514fd6686368fb68a5c4f3b11a2f5e53c94de4f394c48e3.zip"
+     "S3Key": "594ab321cc6aa79c1723028374ec6d84c555249097dfbca11c990391e1504fbb.zip"
     },
     "Environment": {
      "Variables": {
@@ -504,7 +504,7 @@
    ],
    "Metadata": {
     "aws:cdk:path": "PupperStack/CreateDogFunction/Resource",
-    "aws:asset:path": "asset.fbc2dd4ddb335ca84514fd6686368fb68a5c4f3b11a2f5e53c94de4f394c48e3",
+    "aws:asset:path": "asset.594ab321cc6aa79c1723028374ec6d84c555249097dfbca11c990391e1504fbb",
     "aws:asset:is-bundled": false,
     "aws:asset:property": "Code"
    }
@@ -602,7 +602,7 @@
    "Properties": {
     "Code": {
      "S3Bucket": "cdk-hnb659fds-assets-212684282361-us-east-2",
-     "S3Key": "fbc2dd4ddb335ca84514fd6686368fb68a5c4f3b11a2f5e53c94de4f394c48e3.zip"
+     "S3Key": "594ab321cc6aa79c1723028374ec6d84c555249097dfbca11c990391e1504fbb.zip"
     },
     "Environment": {
      "Variables": {
@@ -626,7 +626,7 @@
    ],
    "Metadata": {
     "aws:cdk:path": "PupperStack/GetDogsFunction/Resource",
-    "aws:asset:path": "asset.fbc2dd4ddb335ca84514fd6686368fb68a5c4f3b11a2f5e53c94de4f394c48e3",
+    "aws:asset:path": "asset.594ab321cc6aa79c1723028374ec6d84c555249097dfbca11c990391e1504fbb",
     "aws:asset:is-bundled": false,
     "aws:asset:property": "Code"
    }
@@ -728,7 +728,7 @@
    "Properties": {
     "Code": {
      "S3Bucket": "cdk-hnb659fds-assets-212684282361-us-east-2",
-     "S3Key": "fbc2dd4ddb335ca84514fd6686368fb68a5c4f3b11a2f5e53c94de4f394c48e3.zip"
+     "S3Key": "594ab321cc6aa79c1723028374ec6d84c555249097dfbca11c990391e1504fbb.zip"
     },
     "Environment": {
      "Variables": {
@@ -752,7 +752,7 @@
    ],
    "Metadata": {
     "aws:cdk:path": "PupperStack/VoteDogFunction/Resource",
-    "aws:asset:path": "asset.fbc2dd4ddb335ca84514fd6686368fb68a5c4f3b11a2f5e53c94de4f394c48e3",
+    "aws:asset:path": "asset.594ab321cc6aa79c1723028374ec6d84c555249097dfbca11c990391e1504fbb",
     "aws:asset:is-bundled": false,
     "aws:asset:property": "Code"
    }
@@ -852,7 +852,7 @@
    "Properties": {
     "Code": {
      "S3Bucket": "cdk-hnb659fds-assets-212684282361-us-east-2",
-     "S3Key": "fbc2dd4ddb335ca84514fd6686368fb68a5c4f3b11a2f5e53c94de4f394c48e3.zip"
+     "S3Key": "594ab321cc6aa79c1723028374ec6d84c555249097dfbca11c990391e1504fbb.zip"
     },
     "Environment": {
      "Variables": {
@@ -876,7 +876,7 @@
    ],
    "Metadata": {
     "aws:cdk:path": "PupperStack/UploadImageFunction/Resource",
-    "aws:asset:path": "asset.fbc2dd4ddb335ca84514fd6686368fb68a5c4f3b11a2f5e53c94de4f394c48e3",
+    "aws:asset:path": "asset.594ab321cc6aa79c1723028374ec6d84c555249097dfbca11c990391e1504fbb",
     "aws:asset:is-bundled": false,
     "aws:asset:property": "Code"
    }
@@ -1015,7 +1015,7 @@
    "Properties": {
     "Code": {
      "S3Bucket": "cdk-hnb659fds-assets-212684282361-us-east-2",
-     "S3Key": "fbc2dd4ddb335ca84514fd6686368fb68a5c4f3b11a2f5e53c94de4f394c48e3.zip"
+     "S3Key": "594ab321cc6aa79c1723028374ec6d84c555249097dfbca11c990391e1504fbb.zip"
     },
     "Environment": {
      "Variables": {
@@ -1041,7 +1041,129 @@
    ],
    "Metadata": {
     "aws:cdk:path": "PupperStack/ProcessImageFunction/Resource",
-    "aws:asset:path": "asset.fbc2dd4ddb335ca84514fd6686368fb68a5c4f3b11a2f5e53c94de4f394c48e3",
+    "aws:asset:path": "asset.594ab321cc6aa79c1723028374ec6d84c555249097dfbca11c990391e1504fbb",
+    "aws:asset:is-bundled": false,
+    "aws:asset:property": "Code"
+   }
+  },
+  "GetUserVotesFunctionServiceRole5F555563": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "PupperStack/GetUserVotesFunction/ServiceRole/Resource"
+   }
+  },
+  "GetUserVotesFunctionServiceRoleDefaultPolicy6D3A1DA0": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "dynamodb:BatchGetItem",
+        "dynamodb:ConditionCheckItem",
+        "dynamodb:DescribeTable",
+        "dynamodb:GetItem",
+        "dynamodb:GetRecords",
+        "dynamodb:GetShardIterator",
+        "dynamodb:Query",
+        "dynamodb:Scan"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "VotesTable39A917AC",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "VotesTable39A917AC",
+             "Arn"
+            ]
+           },
+           "/index/*"
+          ]
+         ]
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "GetUserVotesFunctionServiceRoleDefaultPolicy6D3A1DA0",
+    "Roles": [
+     {
+      "Ref": "GetUserVotesFunctionServiceRole5F555563"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "PupperStack/GetUserVotesFunction/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "GetUserVotesFunction6B6B7600": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": "cdk-hnb659fds-assets-212684282361-us-east-2",
+     "S3Key": "594ab321cc6aa79c1723028374ec6d84c555249097dfbca11c990391e1504fbb.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "VOTES_TABLE_NAME": {
+       "Ref": "VotesTable39A917AC"
+      }
+     }
+    },
+    "Handler": "get-user-votes.handler",
+    "Role": {
+     "Fn::GetAtt": [
+      "GetUserVotesFunctionServiceRole5F555563",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs18.x"
+   },
+   "DependsOn": [
+    "GetUserVotesFunctionServiceRoleDefaultPolicy6D3A1DA0",
+    "GetUserVotesFunctionServiceRole5F555563"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "PupperStack/GetUserVotesFunction/Resource",
+    "aws:asset:path": "asset.594ab321cc6aa79c1723028374ec6d84c555249097dfbca11c990391e1504fbb",
     "aws:asset:is-bundled": false,
     "aws:asset:property": "Code"
    }
@@ -1139,7 +1261,7 @@
     "aws:cdk:path": "PupperStack/PupperApi/Resource"
    }
   },
-  "PupperApiDeployment714C7E7C38a9aa88d1c64b326db22e9fbbb11d2b": {
+  "PupperApiDeployment714C7E7Cb88d70cb317231c01679f003cbc17e71": {
    "Type": "AWS::ApiGateway::Deployment",
    "Properties": {
     "Description": "API for Pupper dog adoption app",
@@ -1160,7 +1282,14 @@
     "PupperApiOPTIONS1AE22176",
     "PupperApiuploadOPTIONS3A7B1B33",
     "PupperApiuploadPOSTCA7712A1",
-    "PupperApiuploadF8858F9F"
+    "PupperApiuploadF8858F9F",
+    "PupperApiusersuserIdOPTIONSDFEAC8B7",
+    "PupperApiusersuserIdE8BCA39D",
+    "PupperApiusersuserIdvotesGETD1839797",
+    "PupperApiusersuserIdvotesOPTIONS6D9AD9D9",
+    "PupperApiusersuserIdvotes6FF32DEB",
+    "PupperApiusersOPTIONS03930153",
+    "PupperApiusers1B967DF9"
    ],
    "Metadata": {
     "aws:cdk:path": "PupperStack/PupperApi/Deployment/Resource",
@@ -1171,7 +1300,7 @@
    "Type": "AWS::ApiGateway::Stage",
    "Properties": {
     "DeploymentId": {
-     "Ref": "PupperApiDeployment714C7E7C38a9aa88d1c64b326db22e9fbbb11d2b"
+     "Ref": "PupperApiDeployment714C7E7Cb88d70cb317231c01679f003cbc17e71"
     },
     "RestApiId": {
      "Ref": "PupperApiCF69E181"
@@ -1869,6 +1998,293 @@
    },
    "Metadata": {
     "aws:cdk:path": "PupperStack/PupperApi/Default/upload/POST/Resource"
+   }
+  },
+  "PupperApiusers1B967DF9": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Fn::GetAtt": [
+      "PupperApiCF69E181",
+      "RootResourceId"
+     ]
+    },
+    "PathPart": "users",
+    "RestApiId": {
+     "Ref": "PupperApiCF69E181"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "PupperStack/PupperApi/Default/users/Resource"
+   }
+  },
+  "PupperApiusersOPTIONS03930153": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "ApiKeyRequired": false,
+    "AuthorizationType": "NONE",
+    "HttpMethod": "OPTIONS",
+    "Integration": {
+     "IntegrationResponses": [
+      {
+       "ResponseParameters": {
+        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,Authorization,X-Requested-With'",
+        "method.response.header.Access-Control-Allow-Origin": "'http://localhost:5173'",
+        "method.response.header.Vary": "'Origin'",
+        "method.response.header.Access-Control-Allow-Methods": "'GET,POST,PUT,DELETE,OPTIONS'"
+       },
+       "ResponseTemplates": {
+        "application/json": "#set($origin = $input.params().header.get(\"Origin\"))\n#if($origin == \"\")\n  #set($origin = $input.params().header.get(\"origin\"))\n#end\n#if($origin == \"http://localhost:3000\")\n  #set($context.responseOverride.header.Access-Control-Allow-Origin = $origin)\n#end"
+       },
+       "StatusCode": "204"
+      }
+     ],
+     "RequestTemplates": {
+      "application/json": "{ statusCode: 200 }"
+     },
+     "Type": "MOCK"
+    },
+    "MethodResponses": [
+     {
+      "ResponseParameters": {
+       "method.response.header.Access-Control-Allow-Headers": true,
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Vary": true,
+       "method.response.header.Access-Control-Allow-Methods": true
+      },
+      "StatusCode": "204"
+     }
+    ],
+    "ResourceId": {
+     "Ref": "PupperApiusers1B967DF9"
+    },
+    "RestApiId": {
+     "Ref": "PupperApiCF69E181"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "PupperStack/PupperApi/Default/users/OPTIONS/Resource"
+   }
+  },
+  "PupperApiusersuserIdE8BCA39D": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Ref": "PupperApiusers1B967DF9"
+    },
+    "PathPart": "{userId}",
+    "RestApiId": {
+     "Ref": "PupperApiCF69E181"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "PupperStack/PupperApi/Default/users/{userId}/Resource"
+   }
+  },
+  "PupperApiusersuserIdOPTIONSDFEAC8B7": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "ApiKeyRequired": false,
+    "AuthorizationType": "NONE",
+    "HttpMethod": "OPTIONS",
+    "Integration": {
+     "IntegrationResponses": [
+      {
+       "ResponseParameters": {
+        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,Authorization,X-Requested-With'",
+        "method.response.header.Access-Control-Allow-Origin": "'http://localhost:5173'",
+        "method.response.header.Vary": "'Origin'",
+        "method.response.header.Access-Control-Allow-Methods": "'GET,POST,PUT,DELETE,OPTIONS'"
+       },
+       "ResponseTemplates": {
+        "application/json": "#set($origin = $input.params().header.get(\"Origin\"))\n#if($origin == \"\")\n  #set($origin = $input.params().header.get(\"origin\"))\n#end\n#if($origin == \"http://localhost:3000\")\n  #set($context.responseOverride.header.Access-Control-Allow-Origin = $origin)\n#end"
+       },
+       "StatusCode": "204"
+      }
+     ],
+     "RequestTemplates": {
+      "application/json": "{ statusCode: 200 }"
+     },
+     "Type": "MOCK"
+    },
+    "MethodResponses": [
+     {
+      "ResponseParameters": {
+       "method.response.header.Access-Control-Allow-Headers": true,
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Vary": true,
+       "method.response.header.Access-Control-Allow-Methods": true
+      },
+      "StatusCode": "204"
+     }
+    ],
+    "ResourceId": {
+     "Ref": "PupperApiusersuserIdE8BCA39D"
+    },
+    "RestApiId": {
+     "Ref": "PupperApiCF69E181"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "PupperStack/PupperApi/Default/users/{userId}/OPTIONS/Resource"
+   }
+  },
+  "PupperApiusersuserIdvotes6FF32DEB": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Ref": "PupperApiusersuserIdE8BCA39D"
+    },
+    "PathPart": "votes",
+    "RestApiId": {
+     "Ref": "PupperApiCF69E181"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "PupperStack/PupperApi/Default/users/{userId}/votes/Resource"
+   }
+  },
+  "PupperApiusersuserIdvotesOPTIONS6D9AD9D9": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "ApiKeyRequired": false,
+    "AuthorizationType": "NONE",
+    "HttpMethod": "OPTIONS",
+    "Integration": {
+     "IntegrationResponses": [
+      {
+       "ResponseParameters": {
+        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,Authorization,X-Requested-With'",
+        "method.response.header.Access-Control-Allow-Origin": "'http://localhost:5173'",
+        "method.response.header.Vary": "'Origin'",
+        "method.response.header.Access-Control-Allow-Methods": "'GET,POST,PUT,DELETE,OPTIONS'"
+       },
+       "ResponseTemplates": {
+        "application/json": "#set($origin = $input.params().header.get(\"Origin\"))\n#if($origin == \"\")\n  #set($origin = $input.params().header.get(\"origin\"))\n#end\n#if($origin == \"http://localhost:3000\")\n  #set($context.responseOverride.header.Access-Control-Allow-Origin = $origin)\n#end"
+       },
+       "StatusCode": "204"
+      }
+     ],
+     "RequestTemplates": {
+      "application/json": "{ statusCode: 200 }"
+     },
+     "Type": "MOCK"
+    },
+    "MethodResponses": [
+     {
+      "ResponseParameters": {
+       "method.response.header.Access-Control-Allow-Headers": true,
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Vary": true,
+       "method.response.header.Access-Control-Allow-Methods": true
+      },
+      "StatusCode": "204"
+     }
+    ],
+    "ResourceId": {
+     "Ref": "PupperApiusersuserIdvotes6FF32DEB"
+    },
+    "RestApiId": {
+     "Ref": "PupperApiCF69E181"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "PupperStack/PupperApi/Default/users/{userId}/votes/OPTIONS/Resource"
+   }
+  },
+  "PupperApiusersuserIdvotesGETApiPermissionPupperStackPupperApiC85903B8GETusersuserIdvotesC893DBB3": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "GetUserVotesFunction6B6B7600",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:aws:execute-api:us-east-2:212684282361:",
+       {
+        "Ref": "PupperApiCF69E181"
+       },
+       "/",
+       {
+        "Ref": "PupperApiDeploymentStageprod6CE535E3"
+       },
+       "/GET/users/*/votes"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "PupperStack/PupperApi/Default/users/{userId}/votes/GET/ApiPermission.PupperStackPupperApiC85903B8.GET..users.{userId}.votes"
+   }
+  },
+  "PupperApiusersuserIdvotesGETApiPermissionTestPupperStackPupperApiC85903B8GETusersuserIdvotesC3E9D2A9": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "GetUserVotesFunction6B6B7600",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:aws:execute-api:us-east-2:212684282361:",
+       {
+        "Ref": "PupperApiCF69E181"
+       },
+       "/test-invoke-stage/GET/users/*/votes"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "PupperStack/PupperApi/Default/users/{userId}/votes/GET/ApiPermission.Test.PupperStackPupperApiC85903B8.GET..users.{userId}.votes"
+   }
+  },
+  "PupperApiusersuserIdvotesGETD1839797": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "NONE",
+    "HttpMethod": "GET",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:aws:apigateway:us-east-2:lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "GetUserVotesFunction6B6B7600",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "ResourceId": {
+     "Ref": "PupperApiusersuserIdvotes6FF32DEB"
+    },
+    "RestApiId": {
+     "Ref": "PupperApiCF69E181"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "PupperStack/PupperApi/Default/users/{userId}/votes/GET/Resource"
    }
   },
   "CDKMetadata": {

@@ -33,7 +33,7 @@ const handler = async (event) => {
                 body: JSON.stringify({ error: 'Request body is required' }),
             };
         }
-        const { voteType, userId, isRemoving } = JSON.parse(event.body);
+        const { voteType } = JSON.parse(event.body);
         if (!voteType || !['wag', 'growl'].includes(voteType)) {
             return {
                 statusCode: 400,
@@ -46,33 +46,18 @@ const handler = async (event) => {
                 body: JSON.stringify({ error: 'Vote type must be "wag" or "growl"' }),
             };
         }
-        const finalUserId = userId || 'anonymous-user';
-        console.log('Processing vote for userId:', finalUserId, 'isRemoving:', isRemoving);
-        if (isRemoving) {
-            // Remove the vote from database
-            await docClient.send(new lib_dynamodb_1.DeleteCommand({
-                TableName: VOTES_TABLE,
-                Key: {
-                    userId: finalUserId,
-                    dogId
-                }
-            }));
-            console.log(`Vote removed for user ${finalUserId} on dog ${dogId}`);
-        }
-        else {
-            // Add or update the vote
-            const vote = {
-                userId: finalUserId,
-                dogId,
-                voteType,
-                timestamp: new Date().toISOString(),
-            };
-            await docClient.send(new lib_dynamodb_1.PutCommand({
-                TableName: VOTES_TABLE,
-                Item: vote,
-            }));
-            console.log(`Vote recorded: ${voteType} for user ${finalUserId} on dog ${dogId}`);
-        }
+        // Get userId from Cognito (will be added when we integrate API Gateway with Cognito)
+        const userId = event.requestContext.authorizer?.claims?.sub || 'anonymous-user';
+        const vote = {
+            userId,
+            dogId,
+            voteType,
+            timestamp: new Date().toISOString(),
+        };
+        await docClient.send(new lib_dynamodb_1.PutCommand({
+            TableName: VOTES_TABLE,
+            Item: vote,
+        }));
         return {
             statusCode: 201,
             headers: {
