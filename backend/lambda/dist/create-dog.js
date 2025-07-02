@@ -96,6 +96,7 @@ const handler = async (event) => {
             color: dogData.color,
             entryDate: dogData.entryDate || now,
             createdAt: now,
+            createdBy: dogData.createdBy || 'anonymous-user'
         };
         await docClient.send(new lib_dynamodb_1.PutCommand({
             TableName: DOGS_TABLE,

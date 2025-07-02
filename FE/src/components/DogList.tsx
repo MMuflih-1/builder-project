@@ -13,21 +13,25 @@ interface Dog {
   originalImageUrl?: string;
   resizedImageUrl?: string;
   thumbnailUrl?: string;
+  createdBy?: string;
 }
 
 const API_URL = 'https://iw7dv4kkca.execute-api.us-east-2.amazonaws.com/prod';
 
 interface DogListProps {
   user?: any;
+  userGroups?: string[];
 }
 
-export default function DogList({ user }: DogListProps) {
+export default function DogList({ user, userGroups = [] }: DogListProps) {
   const [dogs, setDogs] = useState<Dog[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedDog, setSelectedDog] = useState<Dog | null>(null);
   const [votingDogId, setVotingDogId] = useState<string | null>(null);
   const [userVotes, setUserVotes] = useState<Record<string, 'wag' | 'growl'>>({});
   const [voteMessage, setVoteMessage] = useState<{dogId: string, message: string, type: 'success' | 'error'} | null>(null);
+  const [deletingDogId, setDeletingDogId] = useState<string | null>(null);
+  const [confirmDelete, setConfirmDelete] = useState<{dogId: string, name: string} | null>(null);
   const [selectedState, setSelectedState] = useState<string>('');
   const [selectedColor, setSelectedColor] = useState<string>('');
   const [minAge, setMinAge] = useState<string>('');
@@ -180,6 +184,39 @@ export default function DogList({ user }: DogListProps) {
       setTimeout(() => setVoteMessage(null), 3000);
     } finally {
       setVotingDogId(null);
+    }
+  };
+
+  const handleDeleteDog = async (dogId: string) => {
+    setConfirmDelete(null);
+    setDeletingDogId(dogId);
+    
+    try {
+      const userId = user?.username || 'anonymous-user';
+      const response = await fetch(`${API_URL}/dogs/${dogId}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userId }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to delete dog');
+      }
+
+      // Remove dog from local state
+      setDogs(prev => prev.filter(dog => dog.dogId !== dogId));
+      setVoteMessage({dogId, message: 'Dog deleted successfully', type: 'success'});
+      setTimeout(() => setVoteMessage(null), 3000);
+      
+    } catch (error) {
+      console.error('Error deleting dog:', error);
+      setVoteMessage({dogId, message: 'Failed to delete dog', type: 'error'});
+      setTimeout(() => setVoteMessage(null), 3000);
+    } finally {
+      setDeletingDogId(null);
     }
   };
 
@@ -469,11 +506,95 @@ export default function DogList({ user }: DogListProps) {
                   {votingDogId === dog.dogId ? 'Voting...' : 
                    userVotes[dog.dogId] === 'growl' ? '❌ Growled!' : '😤 Growl'}
                 </button>
+                
+                {/* Delete button only for dogs created by current user */}
+                {(() => {
+                  const currentUserId = user?.username || user?.userId;
+                  console.log('Current user ID:', currentUserId);
+                  console.log('Dog created by:', dog.createdBy);
+                  console.log('User groups:', userGroups);
+                  console.log('Is shelter:', userGroups.includes('shelter'));
+                  console.log('Is owner:', dog.createdBy === currentUserId);
+                  return userGroups.includes('shelter') && dog.createdBy === currentUserId;
+                })() && (
+                  <button 
+                    onClick={() => setConfirmDelete({dogId: dog.dogId, name: dog.shelter})}
+                    disabled={deletingDogId === dog.dogId}
+                    style={{
+                      backgroundColor: deletingDogId === dog.dogId ? '#6c757d' : '#dc3545',
+                      color: 'white',
+                      border: 'none',
+                      padding: '8px 16px',
+                      borderRadius: '4px',
+                      cursor: deletingDogId === dog.dogId ? 'not-allowed' : 'pointer',
+                      fontSize: '12px'
+                    }}
+                  >
+                    {deletingDogId === dog.dogId ? 'Deleting...' : '🗑️ Delete'}
+                  </button>
+                )}
               </div>
             </div>
           ))}
           </div>
         </>
+      )}
+
+      {/* Delete confirmation modal */}
+      {confirmDelete && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundColor: 'rgba(0,0,0,0.8)',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          zIndex: 1001
+        }}>
+          <div style={{
+            backgroundColor: 'white',
+            padding: '30px',
+            borderRadius: '8px',
+            maxWidth: '400px',
+            textAlign: 'center'
+          }}>
+            <h3 style={{ color: '#dc3545', marginBottom: '15px' }}>Delete Dog</h3>
+            <p>Are you sure you want to delete the dog from <strong>{confirmDelete.name}</strong>?</p>
+            <p style={{ color: '#666', fontSize: '14px' }}>This action cannot be undone.</p>
+            
+            <div style={{ display: 'flex', gap: '10px', justifyContent: 'center', marginTop: '20px' }}>
+              <button 
+                onClick={() => setConfirmDelete(null)}
+                style={{
+                  backgroundColor: '#6c757d',
+                  color: 'white',
+                  border: 'none',
+                  padding: '10px 20px',
+                  borderRadius: '4px',
+                  cursor: 'pointer'
+                }}
+              >
+                Cancel
+              </button>
+              <button 
+                onClick={() => handleDeleteDog(confirmDelete.dogId)}
+                style={{
+                  backgroundColor: '#dc3545',
+                  color: 'white',
+                  border: 'none',
+                  padding: '10px 20px',
+                  borderRadius: '4px',
+                  cursor: 'pointer'
+                }}
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
       )}
 
       {/* Modal for full image */}

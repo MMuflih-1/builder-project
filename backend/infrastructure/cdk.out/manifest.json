@@ -18,7 +18,7 @@
         "validateOnSynth": false,
         "assumeRoleArn": "arn:${AWS::Partition}:iam::212684282361:role/cdk-hnb659fds-deploy-role-212684282361-us-east-2",
         "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::212684282361:role/cdk-hnb659fds-cfn-exec-role-212684282361-us-east-2",
-        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-212684282361-us-east-2/20b73df3258444fae880a1c586bc2b71d2f6c19a56764ed015f31d9669b5f427.json",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-212684282361-us-east-2/0e005d224c8ecc10c786852c2b4effff22a0be343c4b9b4fd3ee60b8a45cb68f.json",
         "requiresBootstrapStackVersion": 6,
         "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
         "additionalDependencies": [
@@ -224,6 +224,24 @@
             "data": "PreSignupFunction4F2ED1FA"
           }
         ],
+        "/PupperStack/DeleteDogFunction/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "DeleteDogFunctionServiceRoleE0752B31"
+          }
+        ],
+        "/PupperStack/DeleteDogFunction/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "DeleteDogFunctionServiceRoleDefaultPolicy4C625748"
+          }
+        ],
+        "/PupperStack/DeleteDogFunction/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "DeleteDogFunction87D16C98"
+          }
+        ],
         "/PupperStack/BucketNotificationsHandler050a0587b7544547bf325f094a3db834/Role/Resource": [
           {
             "type": "aws:cdk:logicalId",
@@ -251,7 +269,7 @@
         "/PupperStack/PupperApi/Deployment/Resource": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "PupperApiDeployment714C7E7Cb88d70cb317231c01679f003cbc17e71"
+            "data": "PupperApiDeployment714C7E7Cefbb582668fd3ec9e38b3227a2a174bd"
           }
         ],
         "/PupperStack/PupperApi/DeploymentStage.prod/Resource": [
@@ -330,6 +348,24 @@
           {
             "type": "aws:cdk:logicalId",
             "data": "PupperApidogsdogIdOPTIONSA3CD31DC"
+          }
+        ],
+        "/PupperStack/PupperApi/Default/dogs/{dogId}/DELETE/ApiPermission.PupperStackPupperApiC85903B8.DELETE..dogs.{dogId}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PupperApidogsdogIdDELETEApiPermissionPupperStackPupperApiC85903B8DELETEdogsdogId69A0E3B1"
+          }
+        ],
+        "/PupperStack/PupperApi/Default/dogs/{dogId}/DELETE/ApiPermission.Test.PupperStackPupperApiC85903B8.DELETE..dogs.{dogId}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PupperApidogsdogIdDELETEApiPermissionTestPupperStackPupperApiC85903B8DELETEdogsdogId807FB623"
+          }
+        ],
+        "/PupperStack/PupperApi/Default/dogs/{dogId}/DELETE/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PupperApidogsdogIdDELETE9798DC9C"
           }
         ],
         "/PupperStack/PupperApi/Default/dogs/{dogId}/vote/Resource": [

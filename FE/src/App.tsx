@@ -69,7 +69,7 @@ function App() {
     }
   });
 
-  const Home = ({ user }: { user: any }) => <DogList user={user} />;
+  const Home = ({ user }: { user: any }) => <DogList user={user} userGroups={userGroups} />;
   const DogDetail = () => <div>Dog Details</div>;
 
   return (

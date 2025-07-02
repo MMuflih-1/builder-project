@@ -179,9 +179,19 @@ export class PupperStack extends cdk.Stack {
       code: lambda.Code.fromAsset('../lambda/dist'),
     });
 
+    const deleteDogFunction = new lambda.Function(this, 'DeleteDogFunction', {
+      runtime: lambda.Runtime.NODEJS_18_X,
+      handler: 'delete-dog.handler',
+      code: lambda.Code.fromAsset('../lambda/dist'),
+      environment: {
+        DOGS_TABLE_NAME: dogsTable.tableName,
+      },
+    });
+
     // Grant permissions to Lambda functions
     dogsTable.grantReadWriteData(createDogFunction);
     dogsTable.grantReadData(getDogsFunction);
+    dogsTable.grantReadWriteData(deleteDogFunction);
     votesTable.grantReadWriteData(voteDogFunction);
     votesTable.grantReadData(getUserVotesFunction);
     imagesBucket.grantReadWrite(createDogFunction);
@@ -223,6 +233,7 @@ export class PupperStack extends cdk.Stack {
     dogs.addMethod('GET', new apigateway.LambdaIntegration(getDogsFunction));
 
     const dogById = dogs.addResource('{dogId}');
+    dogById.addMethod('DELETE', new apigateway.LambdaIntegration(deleteDogFunction));
     const vote = dogById.addResource('vote');
     vote.addMethod('POST', new apigateway.LambdaIntegration(voteDogFunction));
 

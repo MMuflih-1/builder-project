@@ -135,12 +135,17 @@ export default function AddDog() {
       }
 
       // Create dog
+      const currentUser = localStorage.getItem('currentUserEmail') || 'test7'; // Use username
+      console.log('Creating dog with user:', currentUser);
       const dogResponse = await fetch(`${API_URL}/dogs`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          ...formData,
+          createdBy: currentUser
+        }),
       });
 
       if (!dogResponse.ok) {

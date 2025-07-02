@@ -80,6 +80,7 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
       color: dogData.color,
       entryDate: dogData.entryDate || now,
       createdAt: now,
+      createdBy: dogData.createdBy || 'anonymous-user'
     };
 
     await docClient.send(new PutCommand({
