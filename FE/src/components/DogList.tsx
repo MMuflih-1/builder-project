@@ -99,8 +99,22 @@ export default function DogList({ user }: DogListProps) {
   const calculateAge = (birthday: string) => {
     const birthDate = new Date(birthday);
     const today = new Date();
-    const age = Math.floor((today.getTime() - birthDate.getTime()) / (1000 * 60 * 60 * 24 * 365.25));
-    return age;
+    const diffTime = today.getTime() - birthDate.getTime();
+    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+    
+    if (diffDays < 30) {
+      return `${diffDays} ${diffDays === 1 ? 'day' : 'days'}`;
+    } else if (diffDays < 365) {
+      const months = Math.floor(diffDays / 30);
+      return `${months} ${months === 1 ? 'month' : 'months'}`;
+    } else {
+      const years = Math.floor(diffDays / 365);
+      const remainingMonths = Math.floor((diffDays % 365) / 30);
+      if (remainingMonths > 0) {
+        return `${years} ${years === 1 ? 'year' : 'years'}, ${remainingMonths} ${remainingMonths === 1 ? 'month' : 'months'}`;
+      }
+      return `${years} ${years === 1 ? 'year' : 'years'}`;
+    }
   };
 
   const handleVote = async (dogId: string, voteType: 'wag' | 'growl') => {
@@ -384,7 +398,7 @@ export default function DogList({ user }: DogListProps) {
               
               <h3>{dog.shelter}</h3>
               <p><strong>Location:</strong> {dog.city}, {dog.state}</p>
-              <p><strong>Age:</strong> {calculateAge(dog.birthday)} years old</p>
+              <p><strong>Age:</strong> {calculateAge(dog.birthday)}</p>
               <p><strong>Weight:</strong> {dog.weight} lbs</p>
               <p><strong>Color:</strong> {dog.color}</p>
               <p><strong>Description:</strong> {dog.description}</p>

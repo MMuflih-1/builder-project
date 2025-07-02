@@ -324,6 +324,7 @@ export default function AddDog() {
               name="birthday"
               value={formData.birthday}
               onChange={handleInputChange}
+              max={new Date().toISOString().split('T')[0]}
               style={{ width: '100%', padding: '8px', marginTop: '5px' }}
               required
             />
