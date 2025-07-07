@@ -31,6 +31,9 @@ export default function AddDog() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
   const [dragOver, setDragOver] = useState(false);
+  const [imagePrompt, setImagePrompt] = useState('');
+  const [generatingImage, setGeneratingImage] = useState(false);
+  const [generatedImageUrl, setGeneratedImageUrl] = useState<string | null>(null);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -118,6 +121,47 @@ export default function AddDog() {
     }
   };
 
+  const generateImage = async () => {
+    if (!imagePrompt.trim()) {
+      setMessage('Please enter a description for the image');
+      return;
+    }
+
+    setGeneratingImage(true);
+    setMessage('');
+
+    try {
+      const response = await fetch(`${API_URL}/generate-image`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          prompt: imagePrompt
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to generate image');
+      }
+
+      const { imageUrl } = await response.json();
+      setGeneratedImageUrl(imageUrl);
+      
+      // Convert the generated image URL to a File object
+      const imageResponse = await fetch(imageUrl);
+      const imageBlob = await imageResponse.blob();
+      const imageFile = new File([imageBlob], 'generated-dog-image.png', { type: 'image/png' });
+      setSelectedFile(imageFile);
+      
+      setMessage('Image generated successfully!');
+    } catch (error: any) {
+      setMessage(`Error generating image: ${error.message}`);
+    } finally {
+      setGeneratingImage(false);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -177,6 +221,8 @@ export default function AddDog() {
         color: ''
       });
       setSelectedFile(null);
+      setGeneratedImageUrl(null);
+      setImagePrompt('');
 
     } catch (error: any) {
       setMessage(`Error: ${error.message}`);
@@ -362,9 +408,38 @@ export default function AddDog() {
           />
         </div>
 
+        {/* AI Image Generation */}
+        <div>
+          <label>Generate AI Image</label>
+          <div style={{ marginTop: '5px', padding: '15px', border: '1px solid #ddd', borderRadius: '8px', backgroundColor: '#f8f9fa' }}>
+            <input
+              type="text"
+              value={imagePrompt}
+              onChange={(e) => setImagePrompt(e.target.value)}
+              placeholder="Describe the dog image you want to generate (e.g., 'A friendly golden labrador retriever sitting in a park')"
+              style={{ width: '100%', padding: '8px', marginBottom: '10px' }}
+            />
+            <button
+              type="button"
+              onClick={generateImage}
+              disabled={generatingImage || !imagePrompt.trim()}
+              style={{
+                backgroundColor: generatingImage ? '#6c757d' : '#28a745',
+                color: 'white',
+                border: 'none',
+                padding: '8px 16px',
+                borderRadius: '4px',
+                cursor: generatingImage ? 'not-allowed' : 'pointer'
+              }}
+            >
+              {generatingImage ? 'Generating...' : '🎨 Generate Image'}
+            </button>
+          </div>
+        </div>
+
         {/* Image Upload */}
         <div>
-          <label>Dog Photo</label>
+          <label>Dog Photo {generatedImageUrl ? '(Generated)' : '(Upload)'}</label>
           <div
             onDragOver={handleDragOver}
             onDragLeave={handleDragLeave}
@@ -383,10 +458,13 @@ export default function AddDog() {
               <div>
                 <p>Selected: {selectedFile.name}</p>
                 <img 
-                  src={URL.createObjectURL(selectedFile)} 
+                  src={generatedImageUrl || URL.createObjectURL(selectedFile)} 
                   alt="Preview" 
                   style={{ maxWidth: '200px', maxHeight: '200px', objectFit: 'cover' }}
                 />
+                {generatedImageUrl && (
+                  <p style={{ color: '#28a745', fontSize: '12px', marginTop: '5px' }}>✨ AI Generated Image</p>
+                )}
               </div>
             ) : (
               <div>

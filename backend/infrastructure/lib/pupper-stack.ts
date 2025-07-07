@@ -248,6 +248,17 @@ export class PupperStack extends cdk.Stack {
       },
     });
 
+    const generateImageFunction = new lambda.Function(this, 'GenerateImageFunction', {
+      runtime: lambda.Runtime.NODEJS_18_X,
+      handler: 'generate-image.handler',
+      code: lambda.Code.fromAsset('../lambda/dist'),
+      environment: {
+        IMAGES_BUCKET_NAME: imagesBucket.bucketName,
+      },
+      timeout: cdk.Duration.minutes(5),
+      memorySize: 1024,
+    });
+
     // Grant permissions to Lambda functions
     dogsTable.grantReadWriteData(createDogFunction);
     dogsTable.grantReadData(getDogsFunction);
@@ -272,6 +283,14 @@ export class PupperStack extends cdk.Stack {
     imagesBucket.grantReadWrite(uploadImageFunction);
     imagesBucket.grantReadWrite(processImageFunction);
     dogsTable.grantReadWriteData(processImageFunction);
+    imagesBucket.grantReadWrite(generateImageFunction);
+    
+    // Grant Bedrock permissions to generate image function
+    generateImageFunction.addToRolePolicy(new iam.PolicyStatement({
+      effect: iam.Effect.ALLOW,
+      actions: ['bedrock:InvokeModel'],
+      resources: ['arn:aws:bedrock:us-east-1::foundation-model/amazon.nova-canvas-v1:0'],
+    }));
 
     // S3 trigger for image processing
     imagesBucket.addEventNotification(
@@ -333,6 +352,10 @@ export class PupperStack extends cdk.Stack {
     // Get applications for shelter user
     const userApplications = userById.addResource('applications');
     userApplications.addMethod('GET', new apigateway.LambdaIntegration(getApplicationsFunction));
+    
+    // Generate image endpoint
+    const generateImage = api.root.addResource('generate-image');
+    generateImage.addMethod('POST', new apigateway.LambdaIntegration(generateImageFunction));
 
     // Output the table names and bucket name for use in Lambda functions
     new cdk.CfnOutput(this, 'DogsTableName', {

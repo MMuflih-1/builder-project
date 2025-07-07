@@ -138,6 +138,7 @@ export default function DogList({ user, userGroups = [] }: DogListProps) {
       if (searchTerm) {
         const searchLower = searchTerm.toLowerCase();
         filteredDogs = filteredDogs.filter((dog: Dog) => 
+          (dog.name && dog.name.toLowerCase().includes(searchLower)) ||
           dog.description.toLowerCase().includes(searchLower) ||
           dog.shelter.toLowerCase().includes(searchLower) ||
           dog.city.toLowerCase().includes(searchLower) ||
@@ -293,7 +294,7 @@ export default function DogList({ user, userGroups = [] }: DogListProps) {
         <div style={{ marginBottom: '15px' }}>
           <input
             type="text"
-            placeholder="Search by description, shelter, city, or color..."
+            placeholder="Search by name, description, shelter, city, or color..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             style={{

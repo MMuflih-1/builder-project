@@ -128,7 +128,7 @@ function App() {
                   <p>Please contact an administrator to be added to the shelter group.</p>
                 </div>
               } />
-              <Route path="/favorites" element={<Favorites user={user} />} />
+              <Route path="/favorites" element={<Favorites user={user} userGroups={userGroups} />} />
               <Route path="/my-dogs" element={
                 userGroups.includes('shelter') ? 
                 <MyDogs user={user} /> : 
