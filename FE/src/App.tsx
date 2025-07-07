@@ -11,6 +11,7 @@ import Favorites from './components/Favorites';
 import MyDogs from './components/MyDogs';
 import Applications from './components/Applications';
 import MyApplications from './components/MyApplications';
+import Dashboard from './components/Dashboard';
 
 function App() {
   const [userGroups, setUserGroups] = useState<string[]>([]);
@@ -102,6 +103,9 @@ function App() {
               {userGroups.includes('shelter') && (
                 <Link to="/applications" style={{ marginRight: '20px', textDecoration: 'none', color: '#007bff' }}>📋 Applications</Link>
               )}
+              {userGroups.includes('shelter') && (
+                <Link to="/dashboard" style={{ marginRight: '20px', textDecoration: 'none', color: '#007bff' }}>📈 Dashboard</Link>
+              )}
               <Link to="/favorites" style={{ marginRight: '20px', textDecoration: 'none', color: '#28a745' }}>💖 My Favorites</Link>
               {userGroups.includes('adopter') && (
                 <Link to="/my-applications" style={{ marginRight: '20px', textDecoration: 'none', color: '#007bff' }}>📝 My Applications</Link>
@@ -147,6 +151,14 @@ function App() {
                 <div style={{ padding: '20px', textAlign: 'center' }}>
                   <h2>Access Denied</h2>
                   <p>Only registered adopters can view this page.</p>
+                </div>
+              } />
+              <Route path="/dashboard" element={
+                userGroups.includes('shelter') ? 
+                <Dashboard user={user} /> : 
+                <div style={{ padding: '20px', textAlign: 'center' }}>
+                  <h2>Access Denied</h2>
+                  <p>Only registered shelters can view this page.</p>
                 </div>
               } />
               <Route path="/dogs/:id" element={<DogDetail />} />
