@@ -28,6 +28,9 @@ export default function Applications({ user }: ApplicationsProps) {
   const [applications, setApplications] = useState<Application[]>([]);
   const [loading, setLoading] = useState(true);
   const [updatingAppId, setUpdatingAppId] = useState<string | null>(null);
+  const [statusFilter, setStatusFilter] = useState<'all' | 'pending' | 'approved' | 'rejected'>('all');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [sortBy, setSortBy] = useState<'date' | 'dogName' | 'status'>('date');
 
   useEffect(() => {
     fetchApplications();
@@ -111,6 +114,36 @@ export default function Applications({ user }: ApplicationsProps) {
     }
   };
 
+  // Filter and sort applications
+  const filteredAndSortedApplications = applications
+    .filter(app => {
+      // Status filter
+      if (statusFilter !== 'all' && app.status !== statusFilter) return false;
+      
+      // Search filter
+      if (searchTerm) {
+        const searchLower = searchTerm.toLowerCase();
+        return (
+          app.dogName.toLowerCase().includes(searchLower) ||
+          app.adopterName.toLowerCase().includes(searchLower) ||
+          app.adopterEmail.toLowerCase().includes(searchLower)
+        );
+      }
+      
+      return true;
+    })
+    .sort((a, b) => {
+      switch (sortBy) {
+        case 'dogName':
+          return a.dogName.localeCompare(b.dogName);
+        case 'status':
+          return a.status.localeCompare(b.status);
+        case 'date':
+        default:
+          return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+      }
+    });
+
   if (loading) return <div>Loading applications...</div>;
 
   return (
@@ -118,14 +151,113 @@ export default function Applications({ user }: ApplicationsProps) {
       <h1>Adoption Applications 📋</h1>
       <p>Applications for dogs you've posted</p>
       
-      {applications.length === 0 ? (
+      {/* Filter and Search Controls */}
+      <div style={{ 
+        marginBottom: '20px', 
+        padding: '15px', 
+        backgroundColor: '#f8f9fa', 
+        borderRadius: '8px',
+        border: '1px solid #dee2e6'
+      }}>
+        <h3 style={{ margin: '0 0 15px 0', fontSize: '16px' }}>Filter & Search Applications</h3>
+        
+        {/* Search Box */}
+        <div style={{ marginBottom: '15px' }}>
+          <input
+            type="text"
+            placeholder="Search by dog name, adopter name, or email..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            style={{
+              width: '100%',
+              padding: '10px',
+              borderRadius: '4px',
+              border: '1px solid #ccc',
+              fontSize: '14px'
+            }}
+          />
+        </div>
+        
+        <div style={{ display: 'flex', gap: '15px', alignItems: 'center', flexWrap: 'wrap' }}>
+          {/* Status Filter */}
+          <div>
+            <label style={{ marginRight: '8px', fontWeight: 'bold' }}>Status:</label>
+            <select 
+              value={statusFilter} 
+              onChange={(e) => setStatusFilter(e.target.value as 'all' | 'pending' | 'approved' | 'rejected')}
+              style={{ 
+                padding: '5px 10px', 
+                borderRadius: '4px', 
+                border: '1px solid #ccc',
+                backgroundColor: 'white'
+              }}
+            >
+              <option value="all">All Status</option>
+              <option value="pending">Pending</option>
+              <option value="approved">Approved</option>
+              <option value="rejected">Rejected</option>
+            </select>
+          </div>
+          
+          {/* Sort By */}
+          <div>
+            <label style={{ marginRight: '8px', fontWeight: 'bold' }}>Sort by:</label>
+            <select 
+              value={sortBy} 
+              onChange={(e) => setSortBy(e.target.value as 'date' | 'dogName' | 'status')}
+              style={{ 
+                padding: '5px 10px', 
+                borderRadius: '4px', 
+                border: '1px solid #ccc',
+                backgroundColor: 'white'
+              }}
+            >
+              <option value="date">Date (Newest First)</option>
+              <option value="dogName">Dog Name</option>
+              <option value="status">Status</option>
+            </select>
+          </div>
+          
+          {/* Clear Filters */}
+          {(statusFilter !== 'all' || searchTerm || sortBy !== 'date') && (
+            <button 
+              onClick={() => {
+                setStatusFilter('all');
+                setSearchTerm('');
+                setSortBy('date');
+              }}
+              style={{
+                padding: '5px 10px',
+                backgroundColor: '#6c757d',
+                color: 'white',
+                border: 'none',
+                borderRadius: '4px',
+                cursor: 'pointer',
+                fontSize: '12px'
+              }}
+            >
+              Clear Filters
+            </button>
+          )}
+        </div>
+      </div>
+      
+      {/* Results Summary */}
+      <p style={{ marginBottom: '15px', color: '#666' }}>
+        Showing {filteredAndSortedApplications.length} of {applications.length} applications
+        {statusFilter !== 'all' && ` • Status: ${statusFilter}`}
+        {searchTerm && ` • Search: "${searchTerm}"`}
+        {sortBy !== 'date' && ` • Sorted by: ${sortBy}`}
+      </p>
+      
+      {filteredAndSortedApplications.length === 0 ? (
         <div style={{ textAlign: 'center', padding: '40px' }}>
-          <h3>No applications yet!</h3>
-          <p>When people apply to adopt your dogs, they'll appear here.</p>
+          <h3>{applications.length === 0 ? 'No applications yet!' : 'No applications match your filters'}</h3>
+          <p>{applications.length === 0 ? 'When people apply to adopt your dogs, they\'ll appear here.' : 'Try adjusting your search or filter criteria.'}</p>
         </div>
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-          {applications.map((app) => (
+          {filteredAndSortedApplications.map((app) => (
             <div key={app.applicationId} style={{ 
               border: '1px solid #ddd', 
               borderRadius: '8px', 

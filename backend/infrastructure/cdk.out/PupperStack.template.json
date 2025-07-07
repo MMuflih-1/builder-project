@@ -519,7 +519,7 @@
    "Properties": {
     "Code": {
      "S3Bucket": "cdk-hnb659fds-assets-212684282361-us-east-2",
-     "S3Key": "512656f31d92e6829a63820ac217b5a3020d19d1e34e8a8eec7adb0aa38e2fb3.zip"
+     "S3Key": "f36fb2c0d4f287866d72b98e8eb36306cb36713a14ca55112ca8377d53548300.zip"
     },
     "Environment": {
      "Variables": {
@@ -544,7 +544,7 @@
    ],
    "Metadata": {
     "aws:cdk:path": "PupperStack/CreateDogFunction/Resource",
-    "aws:asset:path": "asset.512656f31d92e6829a63820ac217b5a3020d19d1e34e8a8eec7adb0aa38e2fb3",
+    "aws:asset:path": "asset.f36fb2c0d4f287866d72b98e8eb36306cb36713a14ca55112ca8377d53548300",
     "aws:asset:is-bundled": false,
     "aws:asset:property": "Code"
    }
@@ -642,7 +642,7 @@
    "Properties": {
     "Code": {
      "S3Bucket": "cdk-hnb659fds-assets-212684282361-us-east-2",
-     "S3Key": "512656f31d92e6829a63820ac217b5a3020d19d1e34e8a8eec7adb0aa38e2fb3.zip"
+     "S3Key": "f36fb2c0d4f287866d72b98e8eb36306cb36713a14ca55112ca8377d53548300.zip"
     },
     "Environment": {
      "Variables": {
@@ -666,7 +666,7 @@
    ],
    "Metadata": {
     "aws:cdk:path": "PupperStack/GetDogsFunction/Resource",
-    "aws:asset:path": "asset.512656f31d92e6829a63820ac217b5a3020d19d1e34e8a8eec7adb0aa38e2fb3",
+    "aws:asset:path": "asset.f36fb2c0d4f287866d72b98e8eb36306cb36713a14ca55112ca8377d53548300",
     "aws:asset:is-bundled": false,
     "aws:asset:property": "Code"
    }
@@ -768,7 +768,7 @@
    "Properties": {
     "Code": {
      "S3Bucket": "cdk-hnb659fds-assets-212684282361-us-east-2",
-     "S3Key": "512656f31d92e6829a63820ac217b5a3020d19d1e34e8a8eec7adb0aa38e2fb3.zip"
+     "S3Key": "f36fb2c0d4f287866d72b98e8eb36306cb36713a14ca55112ca8377d53548300.zip"
     },
     "Environment": {
      "Variables": {
@@ -792,7 +792,7 @@
    ],
    "Metadata": {
     "aws:cdk:path": "PupperStack/VoteDogFunction/Resource",
-    "aws:asset:path": "asset.512656f31d92e6829a63820ac217b5a3020d19d1e34e8a8eec7adb0aa38e2fb3",
+    "aws:asset:path": "asset.f36fb2c0d4f287866d72b98e8eb36306cb36713a14ca55112ca8377d53548300",
     "aws:asset:is-bundled": false,
     "aws:asset:property": "Code"
    }
@@ -892,7 +892,7 @@
    "Properties": {
     "Code": {
      "S3Bucket": "cdk-hnb659fds-assets-212684282361-us-east-2",
-     "S3Key": "512656f31d92e6829a63820ac217b5a3020d19d1e34e8a8eec7adb0aa38e2fb3.zip"
+     "S3Key": "f36fb2c0d4f287866d72b98e8eb36306cb36713a14ca55112ca8377d53548300.zip"
     },
     "Environment": {
      "Variables": {
@@ -916,7 +916,7 @@
    ],
    "Metadata": {
     "aws:cdk:path": "PupperStack/UploadImageFunction/Resource",
-    "aws:asset:path": "asset.512656f31d92e6829a63820ac217b5a3020d19d1e34e8a8eec7adb0aa38e2fb3",
+    "aws:asset:path": "asset.f36fb2c0d4f287866d72b98e8eb36306cb36713a14ca55112ca8377d53548300",
     "aws:asset:is-bundled": false,
     "aws:asset:property": "Code"
    }
@@ -1055,7 +1055,7 @@
    "Properties": {
     "Code": {
      "S3Bucket": "cdk-hnb659fds-assets-212684282361-us-east-2",
-     "S3Key": "512656f31d92e6829a63820ac217b5a3020d19d1e34e8a8eec7adb0aa38e2fb3.zip"
+     "S3Key": "f36fb2c0d4f287866d72b98e8eb36306cb36713a14ca55112ca8377d53548300.zip"
     },
     "Environment": {
      "Variables": {
@@ -1081,7 +1081,7 @@
    ],
    "Metadata": {
     "aws:cdk:path": "PupperStack/ProcessImageFunction/Resource",
-    "aws:asset:path": "asset.512656f31d92e6829a63820ac217b5a3020d19d1e34e8a8eec7adb0aa38e2fb3",
+    "aws:asset:path": "asset.f36fb2c0d4f287866d72b98e8eb36306cb36713a14ca55112ca8377d53548300",
     "aws:asset:is-bundled": false,
     "aws:asset:property": "Code"
    }
@@ -1179,7 +1179,7 @@
    "Properties": {
     "Code": {
      "S3Bucket": "cdk-hnb659fds-assets-212684282361-us-east-2",
-     "S3Key": "512656f31d92e6829a63820ac217b5a3020d19d1e34e8a8eec7adb0aa38e2fb3.zip"
+     "S3Key": "f36fb2c0d4f287866d72b98e8eb36306cb36713a14ca55112ca8377d53548300.zip"
     },
     "Environment": {
      "Variables": {
@@ -1203,7 +1203,7 @@
    ],
    "Metadata": {
     "aws:cdk:path": "PupperStack/GetUserVotesFunction/Resource",
-    "aws:asset:path": "asset.512656f31d92e6829a63820ac217b5a3020d19d1e34e8a8eec7adb0aa38e2fb3",
+    "aws:asset:path": "asset.f36fb2c0d4f287866d72b98e8eb36306cb36713a14ca55112ca8377d53548300",
     "aws:asset:is-bundled": false,
     "aws:asset:property": "Code"
    }
@@ -1276,7 +1276,7 @@
    "Properties": {
     "Code": {
      "S3Bucket": "cdk-hnb659fds-assets-212684282361-us-east-2",
-     "S3Key": "512656f31d92e6829a63820ac217b5a3020d19d1e34e8a8eec7adb0aa38e2fb3.zip"
+     "S3Key": "f36fb2c0d4f287866d72b98e8eb36306cb36713a14ca55112ca8377d53548300.zip"
     },
     "Handler": "post-confirmation.handler",
     "Role": {
@@ -1293,7 +1293,7 @@
    ],
    "Metadata": {
     "aws:cdk:path": "PupperStack/PostConfirmationFunction/Resource",
-    "aws:asset:path": "asset.512656f31d92e6829a63820ac217b5a3020d19d1e34e8a8eec7adb0aa38e2fb3",
+    "aws:asset:path": "asset.f36fb2c0d4f287866d72b98e8eb36306cb36713a14ca55112ca8377d53548300",
     "aws:asset:is-bundled": false,
     "aws:asset:property": "Code"
    }
@@ -1337,7 +1337,7 @@
    "Properties": {
     "Code": {
      "S3Bucket": "cdk-hnb659fds-assets-212684282361-us-east-2",
-     "S3Key": "512656f31d92e6829a63820ac217b5a3020d19d1e34e8a8eec7adb0aa38e2fb3.zip"
+     "S3Key": "f36fb2c0d4f287866d72b98e8eb36306cb36713a14ca55112ca8377d53548300.zip"
     },
     "Handler": "pre-signup.handler",
     "Role": {
@@ -1353,7 +1353,7 @@
    ],
    "Metadata": {
     "aws:cdk:path": "PupperStack/PreSignupFunction/Resource",
-    "aws:asset:path": "asset.512656f31d92e6829a63820ac217b5a3020d19d1e34e8a8eec7adb0aa38e2fb3",
+    "aws:asset:path": "asset.f36fb2c0d4f287866d72b98e8eb36306cb36713a14ca55112ca8377d53548300",
     "aws:asset:is-bundled": false,
     "aws:asset:property": "Code"
    }
@@ -1455,7 +1455,7 @@
    "Properties": {
     "Code": {
      "S3Bucket": "cdk-hnb659fds-assets-212684282361-us-east-2",
-     "S3Key": "512656f31d92e6829a63820ac217b5a3020d19d1e34e8a8eec7adb0aa38e2fb3.zip"
+     "S3Key": "f36fb2c0d4f287866d72b98e8eb36306cb36713a14ca55112ca8377d53548300.zip"
     },
     "Environment": {
      "Variables": {
@@ -1479,7 +1479,7 @@
    ],
    "Metadata": {
     "aws:cdk:path": "PupperStack/DeleteDogFunction/Resource",
-    "aws:asset:path": "asset.512656f31d92e6829a63820ac217b5a3020d19d1e34e8a8eec7adb0aa38e2fb3",
+    "aws:asset:path": "asset.f36fb2c0d4f287866d72b98e8eb36306cb36713a14ca55112ca8377d53548300",
     "aws:asset:is-bundled": false,
     "aws:asset:property": "Code"
    }
@@ -1570,7 +1570,7 @@
    "Properties": {
     "Code": {
      "S3Bucket": "cdk-hnb659fds-assets-212684282361-us-east-2",
-     "S3Key": "512656f31d92e6829a63820ac217b5a3020d19d1e34e8a8eec7adb0aa38e2fb3.zip"
+     "S3Key": "f36fb2c0d4f287866d72b98e8eb36306cb36713a14ca55112ca8377d53548300.zip"
     },
     "Environment": {
      "Variables": {
@@ -1594,7 +1594,7 @@
    ],
    "Metadata": {
     "aws:cdk:path": "PupperStack/SubmitAdoptionFunction/Resource",
-    "aws:asset:path": "asset.512656f31d92e6829a63820ac217b5a3020d19d1e34e8a8eec7adb0aa38e2fb3",
+    "aws:asset:path": "asset.f36fb2c0d4f287866d72b98e8eb36306cb36713a14ca55112ca8377d53548300",
     "aws:asset:is-bundled": false,
     "aws:asset:property": "Code"
    }
@@ -1701,7 +1701,7 @@
    "Properties": {
     "Code": {
      "S3Bucket": "cdk-hnb659fds-assets-212684282361-us-east-2",
-     "S3Key": "512656f31d92e6829a63820ac217b5a3020d19d1e34e8a8eec7adb0aa38e2fb3.zip"
+     "S3Key": "f36fb2c0d4f287866d72b98e8eb36306cb36713a14ca55112ca8377d53548300.zip"
     },
     "Environment": {
      "Variables": {
@@ -1728,7 +1728,7 @@
    ],
    "Metadata": {
     "aws:cdk:path": "PupperStack/GetApplicationsFunction/Resource",
-    "aws:asset:path": "asset.512656f31d92e6829a63820ac217b5a3020d19d1e34e8a8eec7adb0aa38e2fb3",
+    "aws:asset:path": "asset.f36fb2c0d4f287866d72b98e8eb36306cb36713a14ca55112ca8377d53548300",
     "aws:asset:is-bundled": false,
     "aws:asset:property": "Code"
    }
@@ -1796,24 +1796,6 @@
          ]
         },
         {
-         "Ref": "AWS::NoValue"
-        }
-       ]
-      },
-      {
-       "Action": [
-        "dynamodb:BatchGetItem",
-        "dynamodb:ConditionCheckItem",
-        "dynamodb:DescribeTable",
-        "dynamodb:GetItem",
-        "dynamodb:GetRecords",
-        "dynamodb:GetShardIterator",
-        "dynamodb:Query",
-        "dynamodb:Scan"
-       ],
-       "Effect": "Allow",
-       "Resource": [
-        {
          "Fn::GetAtt": [
           "DogsTable78D17CEF",
           "Arn"
@@ -1832,6 +1814,9 @@
            "/index/*"
           ]
          ]
+        },
+        {
+         "Ref": "AWS::NoValue"
         }
        ]
       },
@@ -1862,7 +1847,7 @@
    "Properties": {
     "Code": {
      "S3Bucket": "cdk-hnb659fds-assets-212684282361-us-east-2",
-     "S3Key": "512656f31d92e6829a63820ac217b5a3020d19d1e34e8a8eec7adb0aa38e2fb3.zip"
+     "S3Key": "f36fb2c0d4f287866d72b98e8eb36306cb36713a14ca55112ca8377d53548300.zip"
     },
     "Environment": {
      "Variables": {
@@ -1889,7 +1874,7 @@
    ],
    "Metadata": {
     "aws:cdk:path": "PupperStack/UpdateApplicationFunction/Resource",
-    "aws:asset:path": "asset.512656f31d92e6829a63820ac217b5a3020d19d1e34e8a8eec7adb0aa38e2fb3",
+    "aws:asset:path": "asset.f36fb2c0d4f287866d72b98e8eb36306cb36713a14ca55112ca8377d53548300",
     "aws:asset:is-bundled": false,
     "aws:asset:property": "Code"
    }
@@ -1996,7 +1981,7 @@
    "Properties": {
     "Code": {
      "S3Bucket": "cdk-hnb659fds-assets-212684282361-us-east-2",
-     "S3Key": "512656f31d92e6829a63820ac217b5a3020d19d1e34e8a8eec7adb0aa38e2fb3.zip"
+     "S3Key": "f36fb2c0d4f287866d72b98e8eb36306cb36713a14ca55112ca8377d53548300.zip"
     },
     "Environment": {
      "Variables": {
@@ -2023,7 +2008,7 @@
    ],
    "Metadata": {
     "aws:cdk:path": "PupperStack/GetAllApplicationsFunction/Resource",
-    "aws:asset:path": "asset.512656f31d92e6829a63820ac217b5a3020d19d1e34e8a8eec7adb0aa38e2fb3",
+    "aws:asset:path": "asset.f36fb2c0d4f287866d72b98e8eb36306cb36713a14ca55112ca8377d53548300",
     "aws:asset:is-bundled": false,
     "aws:asset:property": "Code"
    }

@@ -11,6 +11,7 @@ interface Dog {
   birthday: string;
   weight: number;
   color: string;
+  status?: 'available' | 'adopted';
   originalImageUrl?: string;
   resizedImageUrl?: string;
   thumbnailUrl?: string;
@@ -124,6 +125,15 @@ export default function MyDogs({ user }: MyDogsProps) {
               
               <p><strong>Shelter:</strong> {dog.shelter}</p>
               <p><strong>Location:</strong> {dog.city}, {dog.state}</p>
+              <p><strong>Status:</strong> 
+                <span style={{ 
+                  color: dog.status === 'adopted' ? '#28a745' : '#007bff',
+                  fontWeight: 'bold',
+                  textTransform: 'uppercase'
+                }}>
+                  {dog.status === 'adopted' ? '🏠 ADOPTED' : '📋 AVAILABLE'}
+                </span>
+              </p>
               <p><strong>Age:</strong> {calculateAge(dog.birthday)}</p>
               <p><strong>Weight:</strong> {dog.weight} lbs</p>
               <p><strong>Color:</strong> {dog.color}</p>

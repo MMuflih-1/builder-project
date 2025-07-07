@@ -4,6 +4,7 @@ exports.handler = void 0;
 const client_dynamodb_1 = require("@aws-sdk/client-dynamodb");
 const lib_dynamodb_1 = require("@aws-sdk/lib-dynamodb");
 const send_email_1 = require("./send-email");
+const update_dog_status_1 = require("./update-dog-status");
 const client = new client_dynamodb_1.DynamoDBClient({});
 const docClient = lib_dynamodb_1.DynamoDBDocumentClient.from(client);
 const APPLICATIONS_TABLE = process.env.APPLICATIONS_TABLE_NAME;
@@ -103,6 +104,21 @@ const handler = async (event) => {
             const emailResult = await (0, send_email_1.sendApplicationStatusEmail)(emailData);
             console.log('Email result:', emailResult);
             console.log(`Email notification sent to ${getResult.Item.adopterEmail}`);
+            // Update dog status to adopted if application was approved
+            if (status === 'approved') {
+                console.log('Application approved - marking dog as adopted');
+                console.log('Dog ID to update:', getResult.Item.dogId);
+                try {
+                    const dogStatusResult = await (0, update_dog_status_1.updateDogStatus)(getResult.Item.dogId, 'adopted');
+                    console.log('Dog status update result:', dogStatusResult);
+                }
+                catch (dogUpdateError) {
+                    console.error('Error updating dog status:', dogUpdateError);
+                }
+            }
+            else {
+                console.log('Application not approved, status is:', status);
+            }
         }
         catch (emailError) {
             console.error('Error sending email notification:', emailError);

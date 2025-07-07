@@ -11,6 +11,7 @@ interface Dog {
   birthday: string;
   weight: number;
   color: string;
+  status?: 'available' | 'adopted';
   originalImageUrl?: string;
   resizedImageUrl?: string;
   thumbnailUrl?: string;
@@ -92,6 +93,15 @@ export default function DogList({ user, userGroups = [] }: DogListProps) {
       const response = await fetch(url);
       const data = await response.json();
       let filteredDogs = data.dogs || [];
+      
+      // Debug: Check dog data
+      console.log('Dogs from API:', filteredDogs.slice(0, 2)); // Show first 2 dogs
+      
+      // Filter out adopted dogs
+      filteredDogs = filteredDogs.filter((dog: Dog) => {
+        console.log(`Dog ${dog.name || dog.shelter} status:`, dog.status);
+        return dog.status !== 'adopted';
+      });
       
       // Client-side search filtering
       if (searchTerm) {
@@ -448,6 +458,15 @@ export default function DogList({ user, userGroups = [] }: DogListProps) {
               <h3>{dog.name || dog.shelter}</h3>
               <p><strong>Shelter:</strong> {dog.shelter}</p>
               <p><strong>Location:</strong> {dog.city}, {dog.state}</p>
+              <p><strong>Status:</strong> 
+                <span style={{ 
+                  color: dog.status === 'adopted' ? '#28a745' : '#007bff',
+                  fontWeight: 'bold',
+                  textTransform: 'uppercase'
+                }}>
+                  {dog.status === 'adopted' ? '🏠 ADOPTED' : '📋 AVAILABLE'}
+                </span>
+              </p>
               <p><strong>Age:</strong> {calculateAge(dog.birthday)}</p>
               <p><strong>Weight:</strong> {dog.weight} lbs</p>
               <p><strong>Color:</strong> {dog.color}</p>

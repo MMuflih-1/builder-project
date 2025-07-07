@@ -79,6 +79,7 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
       birthday: dogData.birthday,
       weight: Number(dogData.weight),
       color: dogData.color,
+      status: 'available',
       entryDate: dogData.entryDate || now,
       createdAt: now,
       createdBy: dogData.createdBy || 'anonymous-user'

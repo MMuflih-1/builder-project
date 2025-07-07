@@ -11,6 +11,7 @@ interface Dog {
   birthday: string;
   weight: number;
   color: string;
+  status?: 'available' | 'adopted';
   originalImageUrl?: string;
   resizedImageUrl?: string;
   thumbnailUrl?: string;

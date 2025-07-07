@@ -2,6 +2,7 @@ import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocumentClient, UpdateCommand, GetCommand } from '@aws-sdk/lib-dynamodb';
 import { sendApplicationStatusEmail } from './send-email';
+import { updateDogStatus } from './update-dog-status';
 
 const client = new DynamoDBClient({});
 const docClient = DynamoDBDocumentClient.from(client);
@@ -119,6 +120,21 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
       
       console.log('Email result:', emailResult);
       console.log(`Email notification sent to ${getResult.Item.adopterEmail}`);
+      
+      // Update dog status to adopted if application was approved
+      if (status === 'approved') {
+        console.log('Application approved - marking dog as adopted');
+        console.log('Dog ID to update:', getResult.Item.dogId);
+        
+        try {
+          const dogStatusResult = await updateDogStatus(getResult.Item.dogId, 'adopted');
+          console.log('Dog status update result:', dogStatusResult);
+        } catch (dogUpdateError) {
+          console.error('Error updating dog status:', dogUpdateError);
+        }
+      } else {
+        console.log('Application not approved, status is:', status);
+      }
     } catch (emailError) {
       console.error('Error sending email notification:', emailError);
       console.error('Full email error:', JSON.stringify(emailError, null, 2));

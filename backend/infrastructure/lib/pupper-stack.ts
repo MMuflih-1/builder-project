@@ -258,7 +258,7 @@ export class PupperStack extends cdk.Stack {
     applicationsTable.grantReadData(getApplicationsFunction);
     dogsTable.grantReadData(getApplicationsFunction);
     applicationsTable.grantReadWriteData(updateApplicationFunction);
-    dogsTable.grantReadData(updateApplicationFunction);
+    dogsTable.grantReadWriteData(updateApplicationFunction); // Changed from ReadData to ReadWriteData
     
     // Grant SES permissions to update-application function
     updateApplicationFunction.addToRolePolicy(new iam.PolicyStatement({

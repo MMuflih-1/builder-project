@@ -71,11 +71,16 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
       });
     }
 
-    // Remove encrypted name from response (for privacy)
+    // Remove encrypted name from response and add default status
     const sanitizedDogs = dogs.map(dog => {
       const { encryptedName, ...publicDog } = dog;
-      return publicDog;
+      return {
+        ...publicDog,
+        status: dog.status || 'available' // Set default status for existing dogs
+      };
     });
+    
+    console.log('Sample dog with status:', sanitizedDogs[0]); // Debug log
 
     return {
       statusCode: 200,
