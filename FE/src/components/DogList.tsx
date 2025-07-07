@@ -50,10 +50,12 @@ export default function DogList({ user, userGroups = [] }: DogListProps) {
   const [minAge, setMinAge] = useState<string>('');
   const [maxAge, setMaxAge] = useState<string>('');
   const [searchTerm, setSearchTerm] = useState<string>('');
+  const [userApplications, setUserApplications] = useState<string[]>([]); // Array of dogIds user has applied to
 
   useEffect(() => {
     fetchDogs();
     fetchUserVotes();
+    fetchUserApplications();
   }, [selectedState, selectedColor, minAge, maxAge, searchTerm]); // Re-fetch when filters change
 
   const fetchUserVotes = async () => {
@@ -73,6 +75,35 @@ export default function DogList({ user, userGroups = [] }: DogListProps) {
     } catch (error) {
       console.error('Error fetching user votes:', error);
       setUserVotes({});
+    }
+  };
+
+  const fetchUserApplications = async () => {
+    try {
+      const userId = user?.username || user?.userId || 'anonymous-user';
+      console.log('Fetching applications for userId:', userId);
+      const response = await fetch(`${API_URL}/applications`);
+      
+      if (response.ok) {
+        const data = await response.json();
+        console.log('All applications:', data.applications);
+        
+        // Filter applications by current user and extract dogIds
+        const userApps = data.applications
+          .filter((app: any) => {
+            console.log(`Checking app: adopterId=${app.adopterId}, userId=${userId}`);
+            return app.adopterId === userId;
+          })
+          .map((app: any) => app.dogId);
+        
+        console.log('User has applied to dogs:', userApps);
+        setUserApplications(userApps);
+      } else {
+        console.log('Failed to fetch applications:', response.status);
+      }
+    } catch (error) {
+      console.error('Error fetching user applications:', error);
+      setUserApplications([]);
     }
   };
 
@@ -541,20 +572,41 @@ export default function DogList({ user, userGroups = [] }: DogListProps) {
                 
                 {/* Adopt button only for adopter users */}
                 {userGroups.includes('adopter') && (
-                  <button 
-                    onClick={() => setAdoptionForm({dogId: dog.dogId, shelter: dog.shelter, dogName: dog.name || dog.shelter})}
-                    style={{
-                      backgroundColor: '#28a745',
-                      color: 'white',
-                      border: 'none',
-                      padding: '8px 16px',
-                      borderRadius: '4px',
-                      cursor: 'pointer',
-                      fontWeight: 'bold'
-                    }}
-                  >
-                    🏠 Adopt
-                  </button>
+                  (() => {
+                    const hasApplied = userApplications.includes(dog.dogId);
+                    console.log(`Dog ${dog.name || dog.shelter} (${dog.dogId}): hasApplied=${hasApplied}, userApplications=`, userApplications);
+                    return hasApplied;
+                  })() ? (
+                    <button 
+                      disabled
+                      style={{
+                        backgroundColor: '#6c757d',
+                        color: 'white',
+                        border: 'none',
+                        padding: '8px 16px',
+                        borderRadius: '4px',
+                        cursor: 'not-allowed',
+                        fontWeight: 'bold'
+                      }}
+                    >
+                      ✓ Already Applied
+                    </button>
+                  ) : (
+                    <button 
+                      onClick={() => setAdoptionForm({dogId: dog.dogId, shelter: dog.shelter, dogName: dog.name || dog.shelter})}
+                      style={{
+                        backgroundColor: '#28a745',
+                        color: 'white',
+                        border: 'none',
+                        padding: '8px 16px',
+                        borderRadius: '4px',
+                        cursor: 'pointer',
+                        fontWeight: 'bold'
+                      }}
+                    >
+                      🏠 Adopt
+                    </button>
+                  )
                 )}
                 
                 {/* Delete button only for dogs created by current user */}
@@ -783,6 +835,7 @@ export default function DogList({ user, userGroups = [] }: DogListProps) {
                   try {
                     const adopterId = user?.username || user?.userId || 'anonymous-user';
                     console.log('Submitting application with adopterId:', adopterId);
+                    console.log('User object:', user);
                     const response = await fetch(`${API_URL}/applications`, {
                       method: 'POST',
                       headers: {
@@ -819,6 +872,9 @@ export default function DogList({ user, userGroups = [] }: DogListProps) {
                       livingSpace: '',
                       hasKids: ''
                     });
+                    
+                    // Refresh user applications to update "Already Applied" status
+                    fetchUserApplications();
                   } catch (error) {
                     console.error('Error submitting application:', error);
                     setSubmitMessage({type: 'error', text: 'Failed to submit application. Please try again.'});
