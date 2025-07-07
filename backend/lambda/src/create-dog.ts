@@ -69,6 +69,7 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
     
     const dog = {
       dogId,
+      name: dogData.name,
       encryptedName: encryptName(dogData.name),
       shelter: dogData.shelter,
       city: dogData.city,

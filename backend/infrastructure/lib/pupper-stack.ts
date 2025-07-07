@@ -5,6 +5,8 @@ import * as s3n from 'aws-cdk-lib/aws-s3-notifications';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import * as apigateway from 'aws-cdk-lib/aws-apigateway';
 import * as cognito from 'aws-cdk-lib/aws-cognito';
+import * as iam from 'aws-cdk-lib/aws-iam';
+import * as sns from 'aws-cdk-lib/aws-sns';
 import { Construct } from 'constructs';
 
 export class PupperStack extends cdk.Stack {
@@ -65,6 +67,25 @@ export class PupperStack extends cdk.Stack {
       encryption: dynamodb.TableEncryption.AWS_MANAGED,
       pointInTimeRecovery: true,
       removalPolicy: cdk.RemovalPolicy.DESTROY, // For dev environment
+    });
+
+    // DynamoDB Table for Adoption Applications
+    const applicationsTable = new dynamodb.Table(this, 'ApplicationsTable', {
+      tableName: 'pupper-applications',
+      partitionKey: {
+        name: 'applicationId',
+        type: dynamodb.AttributeType.STRING,
+      },
+      billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
+      encryption: dynamodb.TableEncryption.AWS_MANAGED,
+      pointInTimeRecovery: true,
+      removalPolicy: cdk.RemovalPolicy.DESTROY, // For dev environment
+    });
+
+    // SNS Topic for email notifications
+    const notificationTopic = new sns.Topic(this, 'AdoptionNotificationsTopic', {
+      topicName: 'adoption-notifications',
+      displayName: 'Pupper Adoption Notifications'
     });
 
     // Global Secondary Index for getting all votes by dog
@@ -188,12 +209,65 @@ export class PupperStack extends cdk.Stack {
       },
     });
 
+    const submitAdoptionFunction = new lambda.Function(this, 'SubmitAdoptionFunction', {
+      runtime: lambda.Runtime.NODEJS_18_X,
+      handler: 'submit-adoption.handler',
+      code: lambda.Code.fromAsset('../lambda/dist'),
+      environment: {
+        APPLICATIONS_TABLE_NAME: applicationsTable.tableName,
+      },
+    });
+
+    const getApplicationsFunction = new lambda.Function(this, 'GetApplicationsFunction', {
+      runtime: lambda.Runtime.NODEJS_18_X,
+      handler: 'get-applications.handler',
+      code: lambda.Code.fromAsset('../lambda/dist'),
+      environment: {
+        APPLICATIONS_TABLE_NAME: applicationsTable.tableName,
+        DOGS_TABLE_NAME: dogsTable.tableName,
+      },
+    });
+
+    const updateApplicationFunction = new lambda.Function(this, 'UpdateApplicationFunction', {
+      runtime: lambda.Runtime.NODEJS_18_X,
+      handler: 'update-application.handler',
+      code: lambda.Code.fromAsset('../lambda/dist'),
+      environment: {
+        APPLICATIONS_TABLE_NAME: applicationsTable.tableName,
+        DOGS_TABLE_NAME: dogsTable.tableName,
+      },
+    });
+
+    const getAllApplicationsFunction = new lambda.Function(this, 'GetAllApplicationsFunction', {
+      runtime: lambda.Runtime.NODEJS_18_X,
+      handler: 'get-all-applications.handler',
+      code: lambda.Code.fromAsset('../lambda/dist'),
+      environment: {
+        APPLICATIONS_TABLE_NAME: applicationsTable.tableName,
+        DOGS_TABLE_NAME: dogsTable.tableName,
+      },
+    });
+
     // Grant permissions to Lambda functions
     dogsTable.grantReadWriteData(createDogFunction);
     dogsTable.grantReadData(getDogsFunction);
     dogsTable.grantReadWriteData(deleteDogFunction);
     votesTable.grantReadWriteData(voteDogFunction);
     votesTable.grantReadData(getUserVotesFunction);
+    applicationsTable.grantReadWriteData(submitAdoptionFunction);
+    applicationsTable.grantReadData(getApplicationsFunction);
+    dogsTable.grantReadData(getApplicationsFunction);
+    applicationsTable.grantReadWriteData(updateApplicationFunction);
+    dogsTable.grantReadData(updateApplicationFunction);
+    
+    // Grant SES permissions to update-application function
+    updateApplicationFunction.addToRolePolicy(new iam.PolicyStatement({
+      effect: iam.Effect.ALLOW,
+      actions: ['ses:SendEmail', 'ses:SendRawEmail'],
+      resources: ['*'],
+    }));
+    applicationsTable.grantReadData(getAllApplicationsFunction);
+    dogsTable.grantReadData(getAllApplicationsFunction);
     imagesBucket.grantReadWrite(createDogFunction);
     imagesBucket.grantReadWrite(uploadImageFunction);
     imagesBucket.grantReadWrite(processImageFunction);
@@ -246,6 +320,19 @@ export class PupperStack extends cdk.Stack {
     const userById = users.addResource('{userId}');
     const userVotes = userById.addResource('votes');
     userVotes.addMethod('GET', new apigateway.LambdaIntegration(getUserVotesFunction));
+
+    // Adoption applications endpoint
+    const applications = api.root.addResource('applications');
+    applications.addMethod('POST', new apigateway.LambdaIntegration(submitAdoptionFunction));
+    applications.addMethod('GET', new apigateway.LambdaIntegration(getAllApplicationsFunction));
+    
+    // Update application status
+    const applicationById = applications.addResource('{applicationId}');
+    applicationById.addMethod('PUT', new apigateway.LambdaIntegration(updateApplicationFunction));
+    
+    // Get applications for shelter user
+    const userApplications = userById.addResource('applications');
+    userApplications.addMethod('GET', new apigateway.LambdaIntegration(getApplicationsFunction));
 
     // Output the table names and bucket name for use in Lambda functions
     new cdk.CfnOutput(this, 'DogsTableName', {

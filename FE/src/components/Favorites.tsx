@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 
 interface Dog {
   dogId: string;
+  name: string;
   shelter: string;
   city: string;
   state: string;
@@ -118,7 +119,7 @@ export default function Favorites({ user }: FavoritesProps) {
               )}
               
               <div style={{ display: 'flex', alignItems: 'center', marginTop: '10px' }}>
-                <h3 style={{ margin: 0, flex: 1 }}>{dog.shelter}</h3>
+                <h3 style={{ margin: 0, flex: 1 }}>{dog.name || dog.shelter}</h3>
                 <span style={{ 
                   backgroundColor: '#28a745', 
                   color: 'white', 
@@ -131,6 +132,7 @@ export default function Favorites({ user }: FavoritesProps) {
                 </span>
               </div>
               
+              <p><strong>Shelter:</strong> {dog.shelter}</p>
               <p><strong>Location:</strong> {dog.city}, {dog.state}</p>
               <p><strong>Age:</strong> {calculateAge(dog.birthday)}</p>
               <p><strong>Weight:</strong> {dog.weight} lbs</p>

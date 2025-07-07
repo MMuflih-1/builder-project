@@ -6,7 +6,7 @@ interface DogFormData {
   shelter: string;
   city: string;
   state: string;
-  name: string;
+  dogName: string;
   species: string;
   description: string;
   birthday: string;
@@ -19,7 +19,7 @@ export default function AddDog() {
     shelter: '',
     city: '',
     state: '',
-    name: '',
+    dogName: '',
     species: 'Labrador Retriever',
     description: '',
     birthday: '',
@@ -125,7 +125,7 @@ export default function AddDog() {
 
     try {
       // Validate required fields
-      const requiredFields = ['shelter', 'city', 'state', 'name', 'description', 'birthday', 'weight', 'color'];
+      const requiredFields = ['shelter', 'city', 'state', 'dogName', 'description', 'birthday', 'weight', 'color'];
       for (const field of requiredFields) {
         if (!formData[field as keyof DogFormData]) {
           setMessage(`Please fill in the ${field} field`);
@@ -144,6 +144,7 @@ export default function AddDog() {
         },
         body: JSON.stringify({
           ...formData,
+          name: formData.dogName, // Send dogName as name to backend
           createdBy: currentUser
         }),
       });
@@ -168,7 +169,7 @@ export default function AddDog() {
         shelter: '',
         city: '',
         state: '',
-        name: '',
+        dogName: '',
         species: 'Labrador Retriever',
         description: '',
         birthday: '',
@@ -286,10 +287,10 @@ export default function AddDog() {
           <label>Dog Name *</label>
           <input
             type="text"
-            name="name"
-            value={formData.name}
+            name="dogName"
+            value={formData.dogName || ''}
             onChange={handleInputChange}
-            placeholder="e.g., Buddy"
+            placeholder="e.g., Buddy, Max, Luna"
             style={{ width: '100%', padding: '8px', marginTop: '5px' }}
             required
           />
