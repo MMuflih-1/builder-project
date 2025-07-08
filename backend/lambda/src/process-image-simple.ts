@@ -1,9 +1,11 @@
 import { S3Event, S3Handler } from 'aws-lambda';
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
-import { DynamoDBDocumentClient, UpdateCommand } from '@aws-sdk/lib-dynamodb';
+import { DynamoDBDocumentClient, UpdateCommand, DeleteCommand } from '@aws-sdk/lib-dynamodb';
+import { RekognitionClient, DetectLabelsCommand } from '@aws-sdk/client-rekognition';
 
 const dynamoClient = new DynamoDBClient({});
 const docClient = DynamoDBDocumentClient.from(dynamoClient);
+const rekognitionClient = new RekognitionClient({});
 
 const DOGS_TABLE = process.env.DOGS_TABLE_NAME!;
 
@@ -33,6 +35,68 @@ export const handler: S3Handler = async (event: S3Event) => {
         console.error(`Invalid filename format: ${key}`);
         continue;
       }
+
+      // Use Rekognition to detect if image contains a Labrador Retriever
+      console.log('Starting breed detection with Rekognition');
+      const detectLabelsCommand = new DetectLabelsCommand({
+        Image: {
+          S3Object: {
+            Bucket: bucket,
+            Name: key,
+          },
+        },
+        MaxLabels: 20,
+        MinConfidence: 70,
+      });
+      
+      const rekognitionResponse = await rekognitionClient.send(detectLabelsCommand);
+      const labels = rekognitionResponse.Labels || [];
+      
+      console.log('Detected labels:', labels.map(l => `${l.Name}: ${l.Confidence}%`));
+      
+      // Check for non-dog animals first (strict rejection)
+      const nonDogAnimals = ['Elephant', 'Cat', 'Horse', 'Cow', 'Lion', 'Tiger', 'Bear', 'Bird', 'Fish', 'Snake', 'Rabbit', 'Hamster', 'Guinea Pig', 'Ferret', 'Reptile', 'Lizard', 'Turtle', 'Frog', 'Monkey', 'Ape', 'Deer', 'Sheep', 'Goat', 'Pig', 'Chicken', 'Duck', 'Goose'];
+      const hasNonDogAnimal = labels.some(label => 
+        nonDogAnimals.some(animal => 
+          label.Name?.toLowerCase().includes(animal.toLowerCase())
+        ) && (label.Confidence || 0) > 60
+      );
+      
+      // Check for specific non-Labrador dog breeds
+      const nonLabradorBreeds = ['German Shepherd', 'Bulldog', 'Poodle', 'Chihuahua', 'Beagle', 'Rottweiler', 'Yorkshire Terrier', 'Dachshund', 'Siberian Husky', 'Shih Tzu', 'Border Collie', 'Boxer', 'Cocker Spaniel'];
+      const hasNonLabradorBreed = labels.some(label => 
+        nonLabradorBreeds.some(breed => 
+          label.Name?.toLowerCase().includes(breed.toLowerCase())
+        ) && (label.Confidence || 0) > 75
+      );
+      
+      // Check for dog-related labels (must have at least one)
+      const dogLabels = ['Dog', 'Canine', 'Labrador Retriever', 'Golden Retriever', 'Retriever'];
+      const hasDogIndicators = labels.some(label => 
+        dogLabels.some(dogLabel => 
+          label.Name?.toLowerCase().includes(dogLabel.toLowerCase())
+        ) && (label.Confidence || 0) > 70
+      );
+      
+      if (hasNonDogAnimal || hasNonLabradorBreed || !hasDogIndicators) {
+        console.log('Image rejected: Not a Labrador Retriever, contains non-dog animal, or not a dog');
+        
+        // Delete the dog record from DynamoDB
+        try {
+          await docClient.send(new DeleteCommand({
+            TableName: DOGS_TABLE,
+            Key: { dogId }
+          }));
+          console.log(`Deleted dog record for rejected image: ${dogId}`);
+        } catch (deleteError) {
+          console.error('Error deleting rejected dog record:', deleteError);
+        }
+        
+        // Skip further processing
+        continue;
+      }
+      
+      console.log('Image approved: Appears to be a valid dog image');
 
       // For now, just use the original image for all sizes
       // In production, you'd want proper image resizing

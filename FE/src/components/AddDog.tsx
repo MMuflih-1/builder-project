@@ -177,6 +177,43 @@ export default function AddDog() {
           return;
         }
       }
+      
+      // Validate image if provided
+      if (selectedFile) {
+        setMessage('Validating image...');
+        
+        // Convert file to base64
+        const fileReader = new FileReader();
+        const base64Promise = new Promise<string>((resolve, reject) => {
+          fileReader.onload = () => {
+            const result = fileReader.result as string;
+            const base64 = result.split(',')[1]; // Remove data:image/jpeg;base64, prefix
+            resolve(base64);
+          };
+          fileReader.onerror = reject;
+        });
+        
+        fileReader.readAsDataURL(selectedFile);
+        const imageBase64 = await base64Promise;
+        
+        // Validate image with Rekognition
+        const validateResponse = await fetch(`${API_URL}/validate-image`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ imageBase64 }),
+        });
+        
+        if (!validateResponse.ok) {
+          const errorData = await validateResponse.json();
+          setMessage(errorData.error || 'Image validation failed');
+          setLoading(false);
+          return;
+        }
+        
+        setMessage('Image validated successfully. Creating dog...');
+      }
 
       // Create dog
       const currentUser = localStorage.getItem('currentUserEmail') || 'test7'; // Use username
@@ -484,9 +521,9 @@ export default function AddDog() {
           <div style={{ 
             padding: '10px', 
             borderRadius: '4px', 
-            backgroundColor: message.includes('Error') ? '#f8d7da' : '#d4edda',
-            color: message.includes('Error') ? '#721c24' : '#155724',
-            border: `1px solid ${message.includes('Error') ? '#f5c6cb' : '#c3e6cb'}`
+            backgroundColor: (message.includes('Error') || message.includes('Only dogs are accepted') || message.includes('Only Labrador Retrievers are accepted') || message.includes('Please upload an image of a dog')) ? '#f8d7da' : '#d4edda',
+            color: (message.includes('Error') || message.includes('Only dogs are accepted') || message.includes('Only Labrador Retrievers are accepted') || message.includes('Please upload an image of a dog')) ? '#721c24' : '#155724',
+            border: `1px solid ${(message.includes('Error') || message.includes('Only dogs are accepted') || message.includes('Only Labrador Retrievers are accepted') || message.includes('Please upload an image of a dog')) ? '#f5c6cb' : '#c3e6cb'}`
           }}>
             {message}
           </div>

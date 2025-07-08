@@ -270,6 +270,14 @@ export class PupperStack extends cdk.Stack {
       memorySize: 512,
     });
 
+    const validateImageFunction = new lambda.Function(this, 'ValidateImageFunction', {
+      runtime: lambda.Runtime.NODEJS_18_X,
+      handler: 'validate-image.handler',
+      code: lambda.Code.fromAsset('../lambda/dist'),
+      timeout: cdk.Duration.seconds(30),
+      memorySize: 512,
+    });
+
     // Grant permissions to Lambda functions
     dogsTable.grantReadWriteData(createDogFunction);
     dogsTable.grantReadData(getDogsFunction);
@@ -294,6 +302,13 @@ export class PupperStack extends cdk.Stack {
     imagesBucket.grantReadWrite(uploadImageFunction);
     imagesBucket.grantReadWrite(processImageFunction);
     dogsTable.grantReadWriteData(processImageFunction);
+    
+    // Grant Rekognition permissions to process image function
+    processImageFunction.addToRolePolicy(new iam.PolicyStatement({
+      effect: iam.Effect.ALLOW,
+      actions: ['rekognition:DetectLabels'],
+      resources: ['*'],
+    }));
     imagesBucket.grantReadWrite(generateImageFunction);
     
     // Grant Bedrock permissions to generate image function
@@ -309,6 +324,13 @@ export class PupperStack extends cdk.Stack {
       effect: iam.Effect.ALLOW,
       actions: ['bedrock:InvokeModel'],
       resources: ['arn:aws:bedrock:us-east-1::foundation-model/amazon.nova-micro-v1:0'],
+    }));
+    
+    // Grant Rekognition permissions to validate image function
+    validateImageFunction.addToRolePolicy(new iam.PolicyStatement({
+      effect: iam.Effect.ALLOW,
+      actions: ['rekognition:DetectLabels'],
+      resources: ['*'],
     }));
 
     // S3 trigger for image processing
@@ -379,6 +401,10 @@ export class PupperStack extends cdk.Stack {
     // Recommend dog endpoint
     const recommendDog = api.root.addResource('recommend-dog');
     recommendDog.addMethod('POST', new apigateway.LambdaIntegration(recommendDogFunction));
+    
+    // Validate image endpoint
+    const validateImage = api.root.addResource('validate-image');
+    validateImage.addMethod('POST', new apigateway.LambdaIntegration(validateImageFunction));
 
     // Output the table names and bucket name for use in Lambda functions
     new cdk.CfnOutput(this, 'DogsTableName', {
