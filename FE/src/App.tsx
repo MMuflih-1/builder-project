@@ -12,6 +12,7 @@ import MyDogs from './components/MyDogs';
 import Applications from './components/Applications';
 import MyApplications from './components/MyApplications';
 import Dashboard from './components/Dashboard';
+import DogRecommendation from './components/DogRecommendation';
 
 function App() {
   const [userGroups, setUserGroups] = useState<string[]>([]);
@@ -108,6 +109,9 @@ function App() {
               )}
               <Link to="/favorites" style={{ marginRight: '20px', textDecoration: 'none', color: '#28a745' }}>💖 My Favorites</Link>
               {userGroups.includes('adopter') && (
+                <Link to="/recommend" style={{ marginRight: '20px', textDecoration: 'none', color: '#17a2b8' }}>🤖 Find My Match</Link>
+              )}
+              {userGroups.includes('adopter') && (
                 <Link to="/my-applications" style={{ marginRight: '20px', textDecoration: 'none', color: '#007bff' }}>📝 My Applications</Link>
               )}
               <div style={{ float: 'right', display: 'flex', alignItems: 'center', gap: '10px' }}>
@@ -159,6 +163,14 @@ function App() {
                 <div style={{ padding: '20px', textAlign: 'center' }}>
                   <h2>Access Denied</h2>
                   <p>Only registered shelters can view this page.</p>
+                </div>
+              } />
+              <Route path="/recommend" element={
+                userGroups.includes('adopter') ? 
+                <DogRecommendation /> : 
+                <div style={{ padding: '20px', textAlign: 'center' }}>
+                  <h2>Access Denied</h2>
+                  <p>Only registered adopters can use the dog recommendation feature.</p>
                 </div>
               } />
               <Route path="/dogs/:id" element={<DogDetail />} />

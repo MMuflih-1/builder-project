@@ -18,7 +18,7 @@
         "validateOnSynth": false,
         "assumeRoleArn": "arn:${AWS::Partition}:iam::212684282361:role/cdk-hnb659fds-deploy-role-212684282361-us-east-2",
         "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::212684282361:role/cdk-hnb659fds-cfn-exec-role-212684282361-us-east-2",
-        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-212684282361-us-east-2/25a6aba77a4ab68ea27aabd14d67b242e90a71f994a894187f9556006e1afa7b.json",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-212684282361-us-east-2/46530c6bc7615428905f3289e966dd7fa91893114113dce027558acd6cb0a61e.json",
         "requiresBootstrapStackVersion": 6,
         "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
         "additionalDependencies": [
@@ -352,6 +352,24 @@
             "data": "GenerateImageFunctionE2576D6F"
           }
         ],
+        "/PupperStack/RecommendDogFunction/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "RecommendDogFunctionServiceRole0574FB8B"
+          }
+        ],
+        "/PupperStack/RecommendDogFunction/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "RecommendDogFunctionServiceRoleDefaultPolicy7D2478EC"
+          }
+        ],
+        "/PupperStack/RecommendDogFunction/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "RecommendDogFunction715320F2"
+          }
+        ],
         "/PupperStack/BucketNotificationsHandler050a0587b7544547bf325f094a3db834/Role/Resource": [
           {
             "type": "aws:cdk:logicalId",
@@ -379,7 +397,7 @@
         "/PupperStack/PupperApi/Deployment/Resource": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "PupperApiDeployment714C7E7C08763dd752b1c532fdff6d57a6ead12d"
+            "data": "PupperApiDeployment714C7E7Cda97ffdd2617d893de41635aaef10928"
           }
         ],
         "/PupperStack/PupperApi/DeploymentStage.prod/Resource": [
@@ -728,6 +746,36 @@
           {
             "type": "aws:cdk:logicalId",
             "data": "PupperApigenerateimagePOST72B3D357"
+          }
+        ],
+        "/PupperStack/PupperApi/Default/recommend-dog/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PupperApirecommenddogCAA87E7A"
+          }
+        ],
+        "/PupperStack/PupperApi/Default/recommend-dog/OPTIONS/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PupperApirecommenddogOPTIONSDAD6F4C4"
+          }
+        ],
+        "/PupperStack/PupperApi/Default/recommend-dog/POST/ApiPermission.PupperStackPupperApiC85903B8.POST..recommend-dog": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PupperApirecommenddogPOSTApiPermissionPupperStackPupperApiC85903B8POSTrecommenddogED019105"
+          }
+        ],
+        "/PupperStack/PupperApi/Default/recommend-dog/POST/ApiPermission.Test.PupperStackPupperApiC85903B8.POST..recommend-dog": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PupperApirecommenddogPOSTApiPermissionTestPupperStackPupperApiC85903B8POSTrecommenddogB9F66905"
+          }
+        ],
+        "/PupperStack/PupperApi/Default/recommend-dog/POST/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PupperApirecommenddogPOST69952319"
           }
         ],
         "/PupperStack/DogsTableName": [

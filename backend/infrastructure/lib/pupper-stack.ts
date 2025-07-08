@@ -259,6 +259,17 @@ export class PupperStack extends cdk.Stack {
       memorySize: 1024,
     });
 
+    const recommendDogFunction = new lambda.Function(this, 'RecommendDogFunction', {
+      runtime: lambda.Runtime.NODEJS_18_X,
+      handler: 'recommend-dog.handler',
+      code: lambda.Code.fromAsset('../lambda/dist'),
+      environment: {
+        DOGS_TABLE_NAME: dogsTable.tableName,
+      },
+      timeout: cdk.Duration.minutes(2),
+      memorySize: 512,
+    });
+
     // Grant permissions to Lambda functions
     dogsTable.grantReadWriteData(createDogFunction);
     dogsTable.grantReadData(getDogsFunction);
@@ -290,6 +301,14 @@ export class PupperStack extends cdk.Stack {
       effect: iam.Effect.ALLOW,
       actions: ['bedrock:InvokeModel'],
       resources: ['arn:aws:bedrock:us-east-1::foundation-model/amazon.nova-canvas-v1:0'],
+    }));
+    
+    // Grant permissions to recommend dog function
+    dogsTable.grantReadData(recommendDogFunction);
+    recommendDogFunction.addToRolePolicy(new iam.PolicyStatement({
+      effect: iam.Effect.ALLOW,
+      actions: ['bedrock:InvokeModel'],
+      resources: ['arn:aws:bedrock:us-east-1::foundation-model/amazon.nova-micro-v1:0'],
     }));
 
     // S3 trigger for image processing
@@ -356,6 +375,10 @@ export class PupperStack extends cdk.Stack {
     // Generate image endpoint
     const generateImage = api.root.addResource('generate-image');
     generateImage.addMethod('POST', new apigateway.LambdaIntegration(generateImageFunction));
+    
+    // Recommend dog endpoint
+    const recommendDog = api.root.addResource('recommend-dog');
+    recommendDog.addMethod('POST', new apigateway.LambdaIntegration(recommendDogFunction));
 
     // Output the table names and bucket name for use in Lambda functions
     new cdk.CfnOutput(this, 'DogsTableName', {
