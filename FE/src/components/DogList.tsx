@@ -277,16 +277,78 @@ export default function DogList({ user, userGroups = [] }: DogListProps) {
   if (loading) return <div>Loading dogs...</div>;
 
   return (
-    <div style={{ padding: '20px' }}>
-      <h1>Available Dogs for Adoption</h1>
+    <div style={{ padding: '0' }}>
+      <div style={{
+        textAlign: 'center',
+        marginBottom: '48px',
+        background: 'linear-gradient(135deg, #fffdd0 0%, #047857 100%)',
+        padding: '80px 40px',
+        borderRadius: '24px',
+        marginTop: '-40px',
+        marginLeft: '-24px',
+        marginRight: '-24px'
+      }}>
+        <h1 style={{
+          fontSize: '56px',
+          fontWeight: '800',
+          color: '#fef7ed',
+          marginBottom: '24px',
+          textShadow: '0 2px 4px rgba(0,0,0,0.2)'
+        }}>Find Your Perfect Dog</h1>
+        <p style={{
+          fontSize: '24px',
+          color: '#fef7ed',
+          maxWidth: '700px',
+          margin: '0 auto',
+          fontWeight: '500',
+          lineHeight: '1.4',
+          opacity: 0.9
+        }}>Discover loving Labrador Retrievers waiting for their forever homes</p>
+        <div style={{
+          marginTop: '32px',
+          display: 'flex',
+          justifyContent: 'center',
+          gap: '16px',
+          flexWrap: 'wrap'
+        }}>
+          <div style={{
+            backgroundColor: 'rgba(254,247,237,0.2)',
+            padding: '12px 24px',
+            borderRadius: '20px',
+            fontSize: '16px',
+            color: '#fef7ed',
+            fontWeight: '600',
+            border: '1px solid rgba(254,247,237,0.3)'
+          }}>🐕 Loving Companions</div>
+          <div style={{
+            backgroundColor: 'rgba(254,247,237,0.2)',
+            padding: '12px 24px',
+            borderRadius: '20px',
+            fontSize: '16px',
+            color: '#fef7ed',
+            fontWeight: '600',
+            border: '1px solid rgba(254,247,237,0.3)'
+          }}>🏠 Forever Homes</div>
+          <div style={{
+            backgroundColor: 'rgba(254,247,237,0.2)',
+            padding: '12px 24px',
+            borderRadius: '20px',
+            fontSize: '16px',
+            color: '#fef7ed',
+            fontWeight: '600',
+            border: '1px solid rgba(254,247,237,0.3)'
+          }}>❤️ Perfect Matches</div>
+        </div>
+      </div>
       
       {/* Filter Controls */}
       <div style={{ 
-        marginBottom: '20px', 
-        padding: '15px', 
-        backgroundColor: '#f8f9fa', 
-        borderRadius: '8px',
-        border: '1px solid #dee2e6'
+        marginBottom: '40px', 
+        padding: '32px', 
+        backgroundColor: 'white', 
+        borderRadius: '16px',
+        boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
+        border: '1px solid #e2e8f0'
       }}>
         <h3 style={{ margin: '0 0 10px 0', fontSize: '16px' }}>Search & Filter Dogs</h3>
         
@@ -464,45 +526,88 @@ export default function DogList({ user, userGroups = [] }: DogListProps) {
             {selectedColor && ` • ${selectedColor} color`}
             {(minAge || maxAge) && ` • Age: ${minAge || '0'}-${maxAge || '∞'} years`}
           </p>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '20px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))', gap: '32px', width: '100%', padding: '0 40px' }}>
           {dogs.map((dog) => (
             <div key={dog.dogId} style={{ 
-              border: '1px solid #ddd', 
-              borderRadius: '8px', 
-              padding: '15px',
-              backgroundColor: '#f9f9f9'
+              backgroundColor: 'white',
+              borderRadius: '20px', 
+              overflow: 'hidden',
+              boxShadow: '0 8px 32px rgba(0,0,0,0.12)',
+              transition: 'all 0.3s ease',
+              border: '1px solid #e2e8f0'
             }}>
               {dog.thumbnailUrl && (
-                <img 
-                  src={dog.thumbnailUrl} 
-                  alt={`Dog from ${dog.shelter}`}
-                  style={{ 
-                    width: '100%', 
-                    height: '200px', 
-                    objectFit: 'cover', 
-                    borderRadius: '4px',
-                    cursor: 'pointer'
-                  }}
-                  onClick={() => setSelectedDog(dog)}
-                />
+                <div style={{ position: 'relative', overflow: 'hidden' }}>
+                  <img 
+                    src={dog.thumbnailUrl} 
+                    alt={`Dog from ${dog.shelter}`}
+                    style={{ 
+                      width: '100%', 
+                      height: '280px', 
+                      objectFit: 'cover',
+                      cursor: 'pointer',
+                      transition: 'transform 0.3s ease'
+                    }}
+                    onClick={() => setSelectedDog(dog)}
+                    onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
+                    onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}
+                  />
+                  <div style={{
+                    position: 'absolute',
+                    top: '16px',
+                    right: '16px',
+                    backgroundColor: 'rgba(255,255,255,0.9)',
+                    padding: '8px 12px',
+                    borderRadius: '20px',
+                    fontSize: '12px',
+                    fontWeight: '600',
+                    color: dog.status === 'adopted' ? '#059669' : '#3b82f6'
+                  }}>
+                    {dog.status === 'adopted' ? '🏠 ADOPTED' : '📋 AVAILABLE'}
+                  </div>
+                </div>
               )}
               
-              <h3>{dog.name || dog.shelter}</h3>
-              <p><strong>Shelter:</strong> {dog.shelter}</p>
-              <p><strong>Location:</strong> {dog.city}, {dog.state}</p>
-              <p><strong>Status:</strong> 
-                <span style={{ 
-                  color: dog.status === 'adopted' ? '#28a745' : '#007bff',
-                  fontWeight: 'bold',
-                  textTransform: 'uppercase'
-                }}>
-                  {dog.status === 'adopted' ? '🏠 ADOPTED' : '📋 AVAILABLE'}
-                </span>
-              </p>
-              <p><strong>Age:</strong> {calculateAge(dog.birthday)}</p>
-              <p><strong>Weight:</strong> {dog.weight} lbs</p>
-              <p><strong>Color:</strong> {dog.color}</p>
-              <p><strong>Description:</strong> {dog.description}</p>
+              <div style={{ padding: '24px' }}>
+                <h3 style={{
+                  fontSize: '24px',
+                  fontWeight: '700',
+                  color: '#1e293b',
+                  marginBottom: '8px'
+                }}>{dog.name || dog.shelter}</h3>
+                <div style={{ marginBottom: '20px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
+                    <span style={{ fontSize: '16px' }}>🏠</span>
+                    <span style={{ color: '#64748b', fontSize: '16px' }}>{dog.shelter}</span>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
+                    <span style={{ fontSize: '16px' }}>📍</span>
+                    <span style={{ color: '#64748b', fontSize: '16px' }}>{dog.city}, {dog.state}</span>
+                  </div>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '16px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <span style={{ fontSize: '16px' }}>🎂</span>
+                      <span style={{ color: '#64748b', fontSize: '14px' }}>{calculateAge(dog.birthday)}</span>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <span style={{ fontSize: '16px' }}>⚖️</span>
+                      <span style={{ color: '#64748b', fontSize: '14px' }}>{dog.weight} lbs</span>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <span style={{ fontSize: '16px' }}>🎨</span>
+                      <span style={{ color: '#64748b', fontSize: '14px' }}>{dog.color}</span>
+                    </div>
+                  </div>
+                  <p style={{
+                    color: '#64748b',
+                    fontSize: '14px',
+                    lineHeight: '1.6',
+                    display: '-webkit-box',
+                    WebkitLineClamp: 3,
+                    WebkitBoxOrient: 'vertical',
+                    overflow: 'hidden'
+                  }}>{dog.description}</p>
+                </div>
               
               {/* Vote feedback message */}
               {voteMessage && voteMessage.dogId === dog.dogId && (
@@ -520,20 +625,23 @@ export default function DogList({ user, userGroups = [] }: DogListProps) {
                 </div>
               )}
               
-              <div style={{ marginTop: '10px', display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-                <button 
-                  onClick={() => setSelectedDog(dog)}
-                  style={{
-                    backgroundColor: '#007bff',
-                    color: 'white',
-                    border: 'none',
-                    padding: '8px 16px',
-                    borderRadius: '4px',
-                    cursor: 'pointer'
-                  }}
-                >
-                  View Full Image
-                </button>
+                <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                  <button 
+                    onClick={() => setSelectedDog(dog)}
+                    style={{
+                      backgroundColor: '#065f46',
+                      color: '#fef7ed',
+                      border: 'none',
+                      padding: '10px 16px',
+                      borderRadius: '8px',
+                      cursor: 'pointer',
+                      fontSize: '14px',
+                      fontWeight: '500',
+                      transition: 'all 0.2s ease'
+                    }}
+                  >
+                    View Details
+                  </button>
                 
                 <button 
                   onClick={() => handleVote(dog.dogId, 'wag')}
@@ -636,6 +744,7 @@ export default function DogList({ user, userGroups = [] }: DogListProps) {
                     {deletingDogId === dog.dogId ? 'Deleting...' : '🗑️ Delete'}
                   </button>
                 )}
+                </div>
               </div>
             </div>
           ))}

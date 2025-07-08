@@ -93,34 +93,149 @@ function App() {
         return (
         <>
           <Router>
-            <nav style={{ padding: '10px', borderBottom: '1px solid #ddd', marginBottom: '20px' }}>
-              <Link to="/" style={{ marginRight: '20px', textDecoration: 'none', color: '#007bff' }}>Home</Link>
-              {userGroups.includes('shelter') && (
-                <Link to="/add-dog" style={{ marginRight: '20px', textDecoration: 'none', color: '#007bff' }}>Add Dog</Link>
-              )}
-              {userGroups.includes('shelter') && (
-                <Link to="/my-dogs" style={{ marginRight: '20px', textDecoration: 'none', color: '#007bff' }}>🏠 My Dogs</Link>
-              )}
-              {userGroups.includes('shelter') && (
-                <Link to="/applications" style={{ marginRight: '20px', textDecoration: 'none', color: '#007bff' }}>📋 Applications</Link>
-              )}
-              {userGroups.includes('shelter') && (
-                <Link to="/dashboard" style={{ marginRight: '20px', textDecoration: 'none', color: '#007bff' }}>📈 Dashboard</Link>
-              )}
-              <Link to="/favorites" style={{ marginRight: '20px', textDecoration: 'none', color: '#28a745' }}>💖 My Favorites</Link>
-              {userGroups.includes('adopter') && (
-                <Link to="/recommend" style={{ marginRight: '20px', textDecoration: 'none', color: '#17a2b8' }}>🤖 Find My Match</Link>
-              )}
-              {userGroups.includes('adopter') && (
-                <Link to="/my-applications" style={{ marginRight: '20px', textDecoration: 'none', color: '#007bff' }}>📝 My Applications</Link>
-              )}
-              <div style={{ float: 'right', display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <span style={{ fontSize: '12px', color: '#666' }}>
-                  {userGroups.includes('shelter') ? '🏠 Shelter' : '🐕 Adopter'}
-                </span>
-                <button onClick={signOut} style={{ backgroundColor: '#dc3545', color: 'white', border: 'none', padding: '5px 10px', borderRadius: '4px' }}>Logout</button>
+            <nav style={{
+              background: 'linear-gradient(135deg, #065f46 0%, #047857 100%)',
+              padding: '0',
+              boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
+              position: 'sticky',
+              top: 0,
+              zIndex: 1000
+            }}>
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                padding: '0 40px',
+                height: '70px',
+                width: '100%'
+              }}>
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '32px'
+                }}>
+                  <Link to="/" style={{
+                    fontSize: '24px',
+                    fontWeight: 'bold',
+                    color: 'white',
+                    textDecoration: 'none',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px'
+                  }}>
+                    🐕 Pupper
+                  </Link>
+                  
+                  <div style={{ display: 'flex', gap: '24px' }}>
+                    <Link to="/" style={{
+                      color: 'rgba(255,255,255,0.9)',
+                      textDecoration: 'none',
+                      fontWeight: '500',
+                      padding: '8px 16px',
+                      borderRadius: '8px',
+                      transition: 'all 0.2s',
+                      ':hover': { backgroundColor: 'rgba(255,255,255,0.1)' }
+                    }}>Browse Dogs</Link>
+                    
+                    {userGroups.includes('shelter') && (
+                      <Link to="/add-dog" style={{
+                        color: 'rgba(255,255,255,0.9)',
+                        textDecoration: 'none',
+                        fontWeight: '500',
+                        padding: '8px 16px',
+                        borderRadius: '8px'
+                      }}>Add Dog</Link>
+                    )}
+                    
+                    {userGroups.includes('shelter') && (
+                      <Link to="/my-dogs" style={{
+                        color: 'rgba(255,255,255,0.9)',
+                        textDecoration: 'none',
+                        fontWeight: '500',
+                        padding: '8px 16px',
+                        borderRadius: '8px'
+                      }}>My Dogs</Link>
+                    )}
+                    
+                    {userGroups.includes('shelter') && (
+                      <Link to="/applications" style={{
+                        color: 'rgba(255,255,255,0.9)',
+                        textDecoration: 'none',
+                        fontWeight: '500',
+                        padding: '8px 16px',
+                        borderRadius: '8px'
+                      }}>Applications</Link>
+                    )}
+                    
+                    {userGroups.includes('shelter') && (
+                      <Link to="/dashboard" style={{
+                        color: 'rgba(255,255,255,0.9)',
+                        textDecoration: 'none',
+                        fontWeight: '500',
+                        padding: '8px 16px',
+                        borderRadius: '8px'
+                      }}>Dashboard</Link>
+                    )}
+                    
+                    <Link to="/favorites" style={{
+                      color: 'rgba(255,255,255,0.9)',
+                      textDecoration: 'none',
+                      fontWeight: '500',
+                      padding: '8px 16px',
+                      borderRadius: '8px'
+                    }}>❤️ Favorites</Link>
+                    
+                    {userGroups.includes('adopter') && (
+                      <Link to="/recommend" style={{
+                        color: 'rgba(255,255,255,0.9)',
+                        textDecoration: 'none',
+                        fontWeight: '500',
+                        padding: '8px 16px',
+                        borderRadius: '8px'
+                      }}>🤖 Find Match</Link>
+                    )}
+                    
+                    {userGroups.includes('adopter') && (
+                      <Link to="/my-applications" style={{
+                        color: 'rgba(255,255,255,0.9)',
+                        textDecoration: 'none',
+                        fontWeight: '500',
+                        padding: '8px 16px',
+                        borderRadius: '8px'
+                      }}>My Applications</Link>
+                    )}
+                  </div>
+                </div>
+                
+                <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                  <div style={{
+                    backgroundColor: 'rgba(255,255,255,0.2)',
+                    padding: '6px 12px',
+                    borderRadius: '20px',
+                    fontSize: '12px',
+                    color: 'white',
+                    fontWeight: '500'
+                  }}>
+                    {userGroups.includes('shelter') ? '🏠 Shelter' : '🐕 Adopter'}
+                  </div>
+                  <button onClick={signOut} style={{
+                    backgroundColor: 'rgba(255,255,255,0.2)',
+                    color: 'white',
+                    border: '1px solid rgba(255,255,255,0.3)',
+                    padding: '8px 16px',
+                    borderRadius: '8px',
+                    cursor: 'pointer',
+                    fontWeight: '500',
+                    transition: 'all 0.2s'
+                  }}>Sign Out</button>
+                </div>
               </div>
             </nav>
+            
+            <div style={{
+              minHeight: '100vh',
+              backgroundColor: '#fef7ed'
+            }}>
             <Routes>
               <Route path="/" element={<Home user={user} />} />
               <Route path="/add-dog" element={
@@ -175,6 +290,7 @@ function App() {
               } />
               <Route path="/dogs/:id" element={<DogDetail />} />
             </Routes>
+            </div>
           </Router>
         </>
         );
