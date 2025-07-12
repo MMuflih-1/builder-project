@@ -6,6 +6,6 @@ run the commands below:
 4. ``` cd ../backend/infrastructure/```
 5. to run locally ```cd ../FE``` -> ``` npm run dev ```
 
-p.s. Cloudfront has to be setup manually through AWS console and linking it to the S3 which host the website
+p.s. Cloudfront has to be setup manually through AWS console, then link it to the S3 which host the website
 
 for any info or help contact me @ mmuflihofficial@gmail.com
